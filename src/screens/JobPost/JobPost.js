@@ -10,7 +10,6 @@ export const JobPost = () => {
  
   const navigation = useNavigation()
   const [jobs, setJobs] = React.useState('all');
-
   const jobList = [
     {
       id: '1',
@@ -74,8 +73,10 @@ export const JobPost = () => {
       {/* Home bar  */}
     <Appbar.Header style={styles.homeheaders}>
       <Appbar.Content style={{paddingLeft:10,alignItems:'center', }} title="Job posts" />
+
       {/* <Appbar.Action icon={{ uri: 'https://static.vecteezy.com/system/resources/previews/015/119/100/original/businessman-icon-man-icon-design-illustration-free-png.png' }} onPress={() =>navigation.navigate('Login')} /> */}
       {/* <Appbar.Action icon="dots-vertical" onPress={_handleMore} /> */}
+
     </Appbar.Header>
 
      <View style={{justifyContent:'center',alignItems:'center',marginTop:20,marginBottom:20}}>
@@ -112,6 +113,7 @@ export const JobPost = () => {
             <View style={{flexDirection: 'row', alignItems: 'center' }}>
               <Text>Learn more </Text>
               {/* <Icon name="home" color="black" size={10} /> */}
+              
             </View>
           </TouchableOpacity>
     </View>

@@ -22,9 +22,10 @@ const BottomBar = () => {
         <Text>Home</Text>
       </TouchableOpacity>
       <TouchableOpacity
-        style={[styles.bottom_bar, activeItem === 'post' && styles.active]}
-        onPress={() => navigation.navigate('JobPost')}
+         style={[styles.bottom_bar, activeItem === 'post' && styles.active]}
+        onPress={() => navigation.navigate('JobPost')} 
       >
+        
         <Icon source="post" color={MD3Colors.black} size={28} />
         <Text>Post</Text>
       </TouchableOpacity>

@@ -20,9 +20,7 @@ const MainNavigation = () => {
         <Stack.Screen name="Login" component={Login} />
         <Stack.Screen name="Signup" component={Signup} />
         <Stack.Screen name="JobPost" component={JobPost} />
-
       </Stack.Navigator>
-     
       <BottomBar></BottomBar>
     </NavigationContainer>
   );

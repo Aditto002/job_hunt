@@ -7,12 +7,15 @@ import { PaperProvider,Text } from 'react-native-paper';
 import MainNavigation from './src/navigation/MainNavigation.js';
 
 
+
 export default function App() {
   return (
+
     <PaperProvider>
     <MainNavigation>
     </MainNavigation>
       
     </PaperProvider>
+
   );
 }
