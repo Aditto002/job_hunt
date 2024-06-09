@@ -7,6 +7,8 @@ import FontAwesome from '@expo/vector-icons/FontAwesome';
 import EvilIcons from '@expo/vector-icons/EvilIcons';
 import Feather from '@expo/vector-icons/Feather';
 // import { TouchableOpacity } from 'react-native-gesture-handler';
+import { signInStart,signInSuccess,signInFailure } from '../../../redux/user/userSlice';
+import { useDispatch, useSelector } from 'react-redux';
 
 const Signup = () => {
   const [errormsg, setErrormsg] = useState(null);
@@ -14,6 +16,7 @@ const Signup = () => {
   const passwordRef = useRef();
   const emailRef = useRef();
   const navigation = useNavigation();
+
 
   const [name,setName]=useState('');
   const[nameverify,setNameverify]=useState(false);
@@ -59,7 +62,7 @@ const Signup = () => {
 
       const formData = { username:name, email:emails,password:passwords };
 
-      const response = await axios.post("http://172.20.10.7np:3000/api/auth/singup", formData);
+      const response = await axios.post("http://192.168.1.228:3000/api/auth/singup", formData);
       console.log(response.data);
       navigation.navigate('Home')
     } catch (error) {

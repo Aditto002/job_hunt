@@ -4,6 +4,8 @@ import React, { useState } from 'react'
 import { NavigationContainer ,useNavigation} from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import axios from 'axios';
+import { signInStart,signInSuccess,signInFailure } from '../../../redux/user/userSlice';
+import { useDispatch, useSelector } from 'react-redux';
 
 
 
@@ -11,11 +13,11 @@ const Login = () => {
   const [text, setText] = React.useState('');
   const navigation = useNavigation();
 
-
-  const {loading,error} = useSelector((state)=>state.user);
-
   const [emails,setEmailes]=useState('');
   const [passwords,setPasswords]=useState('');
+
+  const dispatch = useDispatch();
+  const {loading,error} = useSelector((state)=>state.user);
 
   const handelEmail =(e)=>{
     const emailVar = e.nativeEvent.text;
@@ -28,15 +30,20 @@ const Login = () => {
 
   const logininfo = async () => {
     try {
-      
+      dispatch(signInStart());
       const formData = { email:emails,password:passwords };
 
-      const response = await axios.post("http://172.20.10.7:3000/api/auth/singin", formData);
-      console.log(response.data);
-    
-  
+      const response = await axios.post("http://192.168.1.228:3000/api/auth/singin", formData);
+      console.log(response.data.data.user);
+      // localStorage.setItem("token",response?.data?.data?.token)
+      if(response.data.status !== 'success'){
+        dispatch(signInFailure());
+        return;
+      }
+      dispatch(signInSuccess(response.data.data.user));
       navigation.navigate('Home')
     } catch (error) {
+      dispatch(signInFailure(error))
       console.error("Error fetching data: ", error);
    
     }

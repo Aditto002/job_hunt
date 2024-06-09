@@ -1,21 +1,20 @@
+import React from 'react';
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, View } from 'react-native';
-import {Home} from './src/screens/Home/home.js';
-import Login from './src/screens/Auth/Login/login.js';
-import Signup from './src/screens/Auth/Signup/signup.js';
-import { PaperProvider,Text } from 'react-native-paper';
+import { PaperProvider, Text } from 'react-native-paper';
 import MainNavigation from './src/navigation/MainNavigation.js';
-
-
+import { Provider } from 'react-redux';
+import store, { persistor } from './src/redux/store.js';
+import { PersistGate } from 'redux-persist/integration/react';
 
 export default function App() {
   return (
-
-    <PaperProvider>
-    <MainNavigation>
-    </MainNavigation>
-      
-    </PaperProvider>
-
+    <Provider store={store}>
+      <PersistGate loading={null} persistor={persistor}>
+        <PaperProvider>
+          <MainNavigation />
+        </PaperProvider>
+      </PersistGate>
+    </Provider>
   );
 }

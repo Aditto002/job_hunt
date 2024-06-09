@@ -8,18 +8,20 @@ import { BottomNavigation, Text } from 'react-native-paper';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import BottomBar from './BottomBar';
 import JobPost from '../screens/JobPost/JobPost';
+import Profile from '../screens/Profile/profile';
 
 const Stack = createNativeStackNavigator();
 
 const MainNavigation = () => {
   return (
     <NavigationContainer>
-      <Stack.Navigator screenOptions={{ headerShown: false }}>
+      <Stack.Navigator screenOptions={{ headerShown: false }} initialRouteName="Login">
         
         <Stack.Screen name ="Home" component={Home}/>
         <Stack.Screen name="Login" component={Login} />
         <Stack.Screen name="Signup" component={Signup} />
         <Stack.Screen name="JobPost" component={JobPost} />
+        <Stack.Screen name="Profile" component={Profile} />
       </Stack.Navigator>
       <BottomBar></BottomBar>
     </NavigationContainer>
