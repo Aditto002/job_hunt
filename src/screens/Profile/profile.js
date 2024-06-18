@@ -1,8 +1,10 @@
 import * as React from 'react';
 import { Avatar, Text, TextInput } from 'react-native-paper';
 import { StyleSheet, View } from 'react-native'
+import { useSelector } from 'react-redux';
 
 const Profile = () => {
+  const { currentUser} = useSelector(state =>state.user);
     return(
         <>
         <View style={styles.contener}>
@@ -12,19 +14,19 @@ const Profile = () => {
         <View style={styles.subcontener}>
             <TextInput mode="outlined"
                      label="Name"
-                    //  placeholder="Name"
+                     defaultValue={currentUser.username}
                      style={styles.input_margin}
                      >
             </TextInput>
             <TextInput mode="outlined"
-                     label="Email"
-                    //  placeholder="Email"
+                    //  label="Email"
+                    defaultValue={currentUser.email}
                      style={styles.input_margin}
                      >
             </TextInput>
             <TextInput mode="outlined"
                      label="PassWord"
-                    //  placeholder="PassWord"
+                    defaultValue={currentUser.id}
                      >
             </TextInput>
         </View>

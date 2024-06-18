@@ -67,6 +67,7 @@ export default BottomBar;
 
 const styles = StyleSheet.create({
   container: {
+    // position: 'fixed',
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'space-between',

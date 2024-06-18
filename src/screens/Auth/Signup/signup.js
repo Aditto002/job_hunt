@@ -62,7 +62,7 @@ const Signup = () => {
 
       const formData = { username:name, email:emails,password:passwords };
 
-      const response = await axios.post("http://192.168.1.228:3000/api/auth/singup", formData);
+      const response = await axios.post("http://192.168.0.105:3000/api/auth/singup", formData);
       console.log(response.data);
       navigation.navigate('Home')
     } catch (error) {

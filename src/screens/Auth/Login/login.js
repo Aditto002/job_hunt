@@ -33,7 +33,7 @@ const Login = () => {
       dispatch(signInStart());
       const formData = { email:emails,password:passwords };
 
-      const response = await axios.post("http://192.168.1.228:3000/api/auth/singin", formData);
+      const response = await axios.post("http://192.168.0.105:3000/api/auth/singin", formData);
       console.log(response.data.data.user);
       // localStorage.setItem("token",response?.data?.data?.token)
       if(response.data.status !== 'success'){
