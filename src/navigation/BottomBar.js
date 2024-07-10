@@ -34,7 +34,7 @@ const BottomBar = () => {
       </TouchableOpacity>
       <TouchableOpacity
         style={[styles.bottom_bar, activeItem === 'chat' && styles.active]}
-        onPress={() => handleItemClick('chat')}
+        onPress={() => navigation.navigate('ChatScreen')}
       >
         <Icon source="chat" color={MD3Colors.black} size={28} />
         <Text>Chat</Text>

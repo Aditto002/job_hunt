@@ -70,56 +70,41 @@ export const JobPost = () => {
 
   return (
     <View style={styles.container}>
-      {/* Home bar  */}
-    <Appbar.Header style={styles.homeheaders}>
-      <Appbar.Content style={{paddingLeft:10,alignItems:'center', }} title="Job posts" />
+      <Appbar.Header style={styles.appbar}>
+        <Appbar.Content title="Job Posts" />
+      </Appbar.Header>
 
-      {/* <Appbar.Action icon={{ uri: 'https://static.vecteezy.com/system/resources/previews/015/119/100/original/businessman-icon-man-icon-design-illustration-free-png.png' }} onPress={() =>navigation.navigate('Login')} /> */}
-      {/* <Appbar.Action icon="dots-vertical" onPress={_handleMore} /> */}
-
-    </Appbar.Header>
-
-     <View style={{justifyContent:'center',alignItems:'center',marginTop:20,marginBottom:20}}>
-      <Text variant="headlineSmall" >Find your best jobs</Text>
+      <View style={styles.header}>
+        <Text variant="headlineSmall" style={styles.headerText}>Find Your Best Job</Text>
       </View>
 
-      <SafeAreaView style={{marginLeft:15, marginRight:15}}>
-      <SegmentedButtons
-        value={jobs}
-        onValueChange={handleValueChange}
-        buttons={[
-          {
-            value: 'all',
-            label: 'All Jobs',
-          },
-          {
-            value: 'part',
-            label: 'Part Time',
-          },
-          { value: 'full', label: 'Full Time' },
-        ]}
+      <SafeAreaView style={styles.segmentedButtonsContainer}>
+        <SegmentedButtons
+          value={jobs}
+          onValueChange={handleValueChange}
+          buttons={[
+            { value: 'all', label: 'All Jobs' },
+            { value: 'part', label: 'Part Time' },
+            { value: 'full', label: 'Full Time' },
+          ]}
+        />
+      </SafeAreaView>
+
+      <FlatList
+        contentContainerStyle={styles.list}
+        data={filteredJobs}
+        keyExtractor={(item) => item.id}
+        renderItem={({ item }) => (
+          <View style={styles.jobCard}>
+            <Text style={styles.jobTitle}>{item.jobDescription}</Text>
+            <Text style={styles.jobDetail}>Salary: {item.payment}</Text>
+            <Text style={styles.jobDetail}>Experience: {item.workHours}</Text>
+            <TouchableOpacity onPress={() => Linking.openURL(item.link)}>
+              <Text style={styles.learnMore}>Learn more</Text>
+            </TouchableOpacity>
+          </View>
+        )}
       />
-    </SafeAreaView>
-    <View style={styles.jobs_Views}>
-    <FlatList
-  data={filteredJobs}
-  keyExtractor={(item) => item.id}
-  renderItem={({ item }) => (
-    <View style={styles.jobs_Items} >
-      <Text>Job Type : {item.jobDescription}</Text>
-      <Text>Salary : {item.payment}</Text>
-      <Text>Job Hours : {item.workHours}</Text>
-      <TouchableOpacity onPress={() => Linking.openURL(item.link)}>
-            <View style={{flexDirection: 'row', alignItems: 'center' }}>
-              <Text>Learn more </Text>
-              {/* <Icon name="home" color="black" size={10} /> */}
-              
-            </View>
-          </TouchableOpacity>
-    </View>
-  )}
-/>
-</View>
     </View>
   )
 }
@@ -127,18 +112,59 @@ export const JobPost = () => {
 export default JobPost
 
 const styles = StyleSheet.create({
-  homeheaders:{
-    paddingLeft:15
+  container: {
+    
+    flex: 1,
+    backgroundColor: '#f8f9fa',
   },
-  jobs_Items:{
-    alignItems:'center',
-    marginTop:10,
-    padding:50,
-    borderWidth:  2,
-    borderColor:"black",  
+  appbar: {
+    marginTop: -15,
+    marginBottom: -15,
   },
-  jobs_Views:{
-    alignItems:'center',
-    marginBottom:425
-  }
+
+  header: {
+    
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginVertical: 20,
+    
+  },
+  headerText: {
+    
+    fontWeight: 'bold',
+    fontSize: 24,
+  },
+  segmentedButtonsContainer: {
+    marginHorizontal: 15,
+    marginBottom: 20,
+  },
+  list: {
+    paddingHorizontal: 15,
+  },
+  jobCard: {
+    backgroundColor: 'white',
+    borderRadius: 8,
+    padding: 20,
+    marginBottom: 15,
+    shadowColor: '#000',
+    shadowOpacity: 0.1,
+    shadowRadius: 10,
+    shadowOffset: { width: 0, height: 5 },
+    elevation: 5,
+  },
+  jobTitle: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    marginBottom: 10,
+  },
+  jobDetail: {
+    fontSize: 14,
+    color: '#555',
+    marginBottom: 5,
+  },
+  learnMore: {
+    color: '#6200ea',
+    marginTop: 10,
+    textDecorationLine: 'underline',
+  },
 })
