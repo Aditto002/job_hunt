@@ -16,6 +16,7 @@ const Signup = () => {
   const passwordRef = useRef();
   const emailRef = useRef();
   const navigation = useNavigation();
+  const dispatch = useDispatch();
 
 
   const [name,setName]=useState('');
@@ -58,14 +59,16 @@ const Signup = () => {
 
   const Sendtobackend = async () => {
     try {
-      
+      dispatch(signInStart());
 
       const formData = { username:name, email:emails,password:passwords };
 
       const response = await axios.post("http://192.168.1.228:3000/api/auth/singup", formData);
-      console.log(response.data);
-      navigation.navigate('Home')
+      console.log(response.data.data);
+      dispatch(signInSuccess(response.data.data))
+      navigation.navigate('Profile')
     } catch (error) {
+      dispatch(signInFailure(error));
       console.error("Error fetching data: ", error);
     }
   };

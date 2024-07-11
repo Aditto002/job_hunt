@@ -2,7 +2,6 @@ import { StyleSheet, View,TouchableOpacity } from 'react-native'
 import { Button, TextInput, Text } from 'react-native-paper';
 import React, { useState } from 'react'
 import { NavigationContainer ,useNavigation} from '@react-navigation/native';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import axios from 'axios';
 import { signInStart,signInSuccess,signInFailure } from '../../../redux/user/userSlice';
 import { useDispatch, useSelector } from 'react-redux';
@@ -30,6 +29,7 @@ const Login = () => {
         return;
       }
       dispatch(signInSuccess(response.data.data.user));
+      console.log(response.data)
       navigation.navigate('Home');
     } catch (error) {
       dispatch(signInFailure(error));
@@ -58,7 +58,7 @@ const Login = () => {
           // secureTextEntry 
           theme={{ colors: { primary: '#3f51b5', underlineColor: 'transparent' } }}
         />
-        <TouchableOpacity style={styles.iconContainer} onPress={() => setShowPassword(!showPassword)}>
+        {/* <TouchableOpacity style={styles.iconContainer} onPress={() => setShowPassword(!showPassword)}>
               {
                 passwords.length < 1 ? null : !showPassword ? (
                   <Feather name={'eye-off'} style={styles.pass_icons} />
@@ -66,7 +66,7 @@ const Login = () => {
                   <Feather name={'eye'} style={styles.pass_icons} />
                 )
               }
-            </TouchableOpacity>
+            </TouchableOpacity> */}
             </View>
         <Button mode="contained" style={styles.button} onPress={loginInfo} loading={loading}>
           Login

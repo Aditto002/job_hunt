@@ -39,7 +39,7 @@ const BottomBar = () => {
         <Icon source="chat" color={MD3Colors.black} size={28} />
         <Text>Chat</Text>
       </TouchableOpacity>
-      <TouchableOpacity
+      {/* <TouchableOpacity
         style={[styles.bottom_bar, activeItem === 'login' && styles.active]}
         onPress={() => navigation.navigate('Profile')}
       >
@@ -58,6 +58,24 @@ const BottomBar = () => {
               </TouchableOpacity>
             )
           } 
+      </TouchableOpacity> */}
+      <TouchableOpacity
+        style={[styles.bottom_bar, activeItem === 'profile' && styles.active]}
+        onPress={() => navigation.navigate(currentUser ? 'Profile' : 'Login')}
+      >
+        {
+          currentUser ? (
+            <>
+              <Feather name={'user'} style={styles.f_icons_G} />
+              <Text style={styles.profile_style}>Profile</Text>
+            </>
+          ) : (
+            <>
+              <Feather name={'log-in'} style={styles.f_icons_G} />
+              <Text style={styles.profile_style}>Login</Text>
+            </>
+          )
+        }
       </TouchableOpacity>
     </View>
   );
