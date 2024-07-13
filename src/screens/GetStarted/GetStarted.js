@@ -2,6 +2,7 @@ import React from 'react';
 import { StyleSheet, View, Image } from 'react-native';
 import { Button, Text } from 'react-native-paper';
 import { useNavigation } from '@react-navigation/native';
+// import {Homebg} from '../../navigation/index.js'
 
 const GetStarted = () => {
   const navigation = useNavigation();
@@ -15,7 +16,7 @@ const GetStarted = () => {
       <Button
         mode="contained"
         style={styles.button}
-        onPress={() => navigation.navigate('Login')}
+        onPress={() => navigation.navigate('Homebg')}
       >
         Get Started
       </Button>

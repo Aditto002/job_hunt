@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { Avatar, Text, TextInput, Button } from 'react-native-paper';
 import { Alert, StyleSheet, View, TouchableOpacity } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
@@ -7,27 +7,25 @@ import * as FileSystem from 'expo-file-system';
 import { firebase } from '../../firebaseAuth/firebaseConfig.js';
 import 'firebase/compat/storage';
 import Feather from '@expo/vector-icons/Feather';
-import { updateUserStart, updateUserSuccess, updateUserFailur, deleteUserStart, deleteUserSuccess, deleteUserFailur } from '../../redux/user/userSlice.js';
+import { updateUserStart, updateUserSuccess, updateUserFailur,signOut } from '../../redux/user/userSlice.js';
 import axios from 'axios';
 import { useNavigation } from '@react-navigation/native';
-
 const Profile = () => {
-  const navigation = useNavigation();
   const dispatch = useDispatch();
   const { currentUser } = useSelector(state => state.user);
   const [image, setImage] = useState(null);
   const [imageLoading, setImageLoading] = useState(false);
   const [isUploaded, setIsUploaded] = useState(false);
-  const [name, setName] = useState(currentUser?.username || '');
-  const [emails, setEmailes] = useState(currentUser?.email || '');
-  const [passwords, setPasswords] = useState('');
-  const [profilePicture, setProfilePicture] = useState(currentUser?.profilePicture || '');
-
+  const [name, setName] = useState(currentUser.username);
+  const [emails, setEmailes] = useState(currentUser.email);
+  const [passwords, setPasswords] = useState(currentUser.password);
+  const [profilePicture, setProfilePicture] = useState(currentUser.profilePicture);
+  const navigation = useNavigation();
   const handleName = (e) => {
     const namevar = e.nativeEvent.text;
     setName(namevar);
   };
-
+  
   const handelEmail = (e) => {
     const emailvar = e.nativeEvent.text;
     setEmailes(emailvar);
@@ -46,6 +44,7 @@ const Profile = () => {
       quality: 1,
     });
 
+    console.log(result);
     if (!result.canceled) {
       setImage(result.assets[0].uri);
       setIsUploaded(false);
@@ -87,11 +86,6 @@ const Profile = () => {
 
   const Sendtobackend = async () => {
     try {
-      if (!currentUser) {
-        Alert.alert("User not found");
-        return;
-      }
-
       dispatch(updateUserStart());
 
       const formData = {};
@@ -120,28 +114,18 @@ const Profile = () => {
         return;
       }
       dispatch(updateUserSuccess(response.data.data.user));
+      console.log(response.data.data.user);
     } catch (error) {
       dispatch(updateUserFailur(error));
       console.error("Error fetching data: ", error);
     }
   };
 
-  const handldeletedAccount = async () => {
-    try {
-      if (!currentUser) {
-        Alert.alert("User not found");
-        return;
-      }
-
-      dispatch(deleteUserStart());
-      const res = await axios.delete(`http://192.168.1.228:3000/api/user/delete/${currentUser._id}`);
-      dispatch(deleteUserSuccess(res.data));
-      navigation.navigate('Home');
-    } catch (e) {
-      dispatch(deleteUserFailur(e));
-      console.error("Error deleting account: ", e);
-    }
-  };
+  const SingOutfn =()=>{
+      
+          dispatch(signOut());
+          navigation.navigate('Login')
+  }
 
   return (
     <>
@@ -167,28 +151,28 @@ const Profile = () => {
         <TextInput
           mode="outlined"
           label="Name"
-          value={name}
+          defaultValue={currentUser.username}
           style={styles.input_margin}
           onChange={handleName}
         />
         <TextInput
           mode="outlined"
           label="Email"
-          value={emails}
+          defaultValue={currentUser.email}
           style={styles.input_margin}
           onChange={handelEmail}
         />
         <TextInput
           mode="outlined"
           label="Password"
+          // defaultValue={currentUser.password}
           onChange={handelPassword}
-          secureTextEntry
         />
         <Button mode="contained" style={styles.button} onPress={Sendtobackend}>
           Update
         </Button>
-        <Button mode="contained" style={styles.button} onPress={handldeletedAccount}>
-          Delete
+        <Button mode="contained" style={styles.button} onPress={SingOutfn}>
+          Sing Out
         </Button>
       </View>
     </>

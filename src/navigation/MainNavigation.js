@@ -9,6 +9,7 @@ import JobPost from '../screens/JobPost/JobPost';
 import Profile from '../screens/Profile/profile';
 import ChatScreen from '../screens/Chat/ChatScreen.js';
 import GetStarted from '../screens/GetStarted/GetStarted.js';
+import Homebg from './index.js';
 // import { createDrawerNavigator } from '@react-navigation/drawer';
 
 
@@ -39,6 +40,13 @@ const StackNav = ()=>{
         name="GetStarted"
         component={GetStarted}
         options={{ headerShown: false }}
+      />
+      <Stack.Screen
+      name='Homebg'
+      component={Homebg}
+      options={{ headerShown: false }}
+      
+      
       />
       <Stack.Screen
         name="Home"
