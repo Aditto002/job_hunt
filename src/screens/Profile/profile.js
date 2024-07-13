@@ -151,14 +151,14 @@ const Profile = () => {
         <TextInput
           mode="outlined"
           label="Name"
-          defaultValue={currentUser.username}
+          defaultValue={currentUser.username ?currentUser.username:""}
           style={styles.input_margin}
           onChange={handleName}
         />
         <TextInput
           mode="outlined"
           label="Email"
-          defaultValue={currentUser.email}
+          defaultValue={currentUser.email?currentUser.email:""}
           style={styles.input_margin}
           onChange={handelEmail}
         />

@@ -10,6 +10,7 @@ import Profile from '../screens/Profile/profile';
 import ChatScreen from '../screens/Chat/ChatScreen.js';
 import GetStarted from '../screens/GetStarted/GetStarted.js';
 import Homebg from './index.js';
+import AdminScreen from '../screens/AdminScreens/AdminScreen.js';
 // import { createDrawerNavigator } from '@react-navigation/drawer';
 
 
@@ -77,6 +78,11 @@ const StackNav = ()=>{
         name="ChatScreen"
         component={ChatScreen}
         options={{ headerBackVisible: false }} 
+      />
+      <Stack.Screen
+      name="AdminScreen"
+      component={AdminScreen}
+      options={{ headerBackVisible: false }}
       />
     </Stack.Navigator>
     {routeName !== 'GetStarted' && <BottomBar />}

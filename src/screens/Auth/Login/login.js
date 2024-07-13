@@ -29,8 +29,13 @@ const Login = () => {
         return;
       }
       dispatch(signInSuccess(response.data.data.user));
-      console.log(response.data)
-      navigation.navigate('Home');
+      console.log(response.data.userType)
+      if(response.data.userType == "Admin"){
+          navigation.navigate('AdminScreen')
+      }else{
+
+        navigation.navigate('Home');
+      }
     } catch (error) {
       dispatch(signInFailure(error));
       console.error("Error fetching data: ", error);

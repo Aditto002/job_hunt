@@ -1,4 +1,4 @@
-import { ScrollView, StyleSheet, View, TouchableOpacity, KeyboardAvoidingView, Platform } from 'react-native';
+import { ScrollView, StyleSheet, View, TouchableOpacity, KeyboardAvoidingView, Platform, Alert } from 'react-native';
 import React, { useRef, useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import { Button, Text, TextInput } from 'react-native-paper';
@@ -9,6 +9,7 @@ import Feather from '@expo/vector-icons/Feather';
 // import { TouchableOpacity } from 'react-native-gesture-handler';
 import { signInStart,signInSuccess,signInFailure } from '../../../redux/user/userSlice';
 import { useDispatch, useSelector } from 'react-redux';
+import { RadioButton } from 'react-native-paper';
 
 const Signup = () => {
   const [errormsg, setErrormsg] = useState(null);
@@ -26,6 +27,10 @@ const Signup = () => {
   const [passwords,setPasswords]=useState('');
   const[passwordsverify,setPasswordsverify]=useState(false);
   const [showPassword,setShowPassword] = useState(false);
+  const [userType , setUserType] = useState('');
+  const [secretText , setSecretText] = useState('');
+  
+
 
   const handleName=(e)=>{
     const namevar=e.nativeEvent.text;
@@ -58,10 +63,14 @@ const Signup = () => {
   }
 
   const Sendtobackend = async () => {
+    console.log(secretText);
     try {
       dispatch(signInStart());
 
-      const formData = { username:name, email:emails,password:passwords };
+      const formData = { username:name, email:emails,password:passwords , userType};
+      if(userType=='Admin' && secretText != "ak"){
+        return Alert.alert("invalid Admin");
+      }
 
       const response = await axios.post("http://192.168.1.228:3000/api/auth/singup", formData);
       console.log(response.data.data);
@@ -86,7 +95,40 @@ const Signup = () => {
         <Text style={styles.text_space} variant="labelLarge">Find your best job in Jobnest</Text>
         {errormsg && <Text style={{ color: 'red', alignItems: "center" }}>{errormsg}</Text>}
 
+        <View style={styles.radioButton_div}>
+        <Text style={styles.radioButton_title}>Login As</Text>
+        <View style={styles.radioButton_inner_div}>
+        <Text style={styles.radioButton_text}>User</Text>
+        <RadioButton value='User' status={userType == 'User'  ? 'checked' : 'unchecked'} onPress={()=>setUserType('User')}/>
+        </View>
+
+        <View style={styles.radioButton_inner_div}>
+        <Text style={styles.radioButton_text}>Admin</Text>
+        <RadioButton value='Admin' status={userType == 'Admin'  ? 'checked' : 'unchecked'}  onPress={()=>setUserType('Admin')}/>
+        </View>
+        </View>
+       
+
+
+ {/* for admin */}
+
         <View style={styles.subcontainer}>
+
+{
+                    userType == 'Admin' ? 
+                    <View style={styles.inputContainer}>
+                    <TextInput
+                      label="Secret Text"
+                      name='secret_text'
+                      style={styles.textInput}
+                      onChange={(e)=>setSecretText(e.nativeEvent.text)}          
+                    />
+                 </View>
+        
+                    :""
+}
+
+
           <View style={styles.inputContainer}>
             <TextInput
               label="User Name"
@@ -221,4 +263,30 @@ text_space: {
   textAlign: 'center',
   color: '#666',
 },
+radioButton_div:{
+display:'flex',
+flexDirection:'row',
+justifyContent:'space-between',
+alignItems:'center',
+marginBottom:20
+  },
+  radioButton_inner_div:{
+ display:'flex',
+flexDirection:'row',
+justifyContent:'center',
+alignItems:'center',
+marginLeft:40
+  
+  },
+  radioButton_title:{
+  fontSize:18,
+  color:'#420475',
+  marginRight: 25
+  },
+  radioButton_text:{
+  fontSize:16,
+  color:'black'
+  }
+
+
 });
