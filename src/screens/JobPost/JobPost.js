@@ -70,9 +70,9 @@ export const JobPost = () => {
 
   return (
     <View style={styles.container}>
-      <Appbar.Header style={styles.appbar}>
-        <Appbar.Content title="Job Posts" />
-      </Appbar.Header>
+     <View style={styles.header}>
+        <Text style={styles.headerTitle}>Job Posts</Text>
+      </View>
 
       <View style={styles.header}>
         <Text variant="headlineSmall" style={styles.headerText}>Find Your Best Job</Text>
@@ -113,24 +113,28 @@ export default JobPost
 
 const styles = StyleSheet.create({
   container: {
-    
     flex: 1,
-    backgroundColor: '#f8f9fa',
+    backgroundColor: '#fff',
   },
   appbar: {
     marginTop: -15,
     marginBottom: -15,
+    
   },
 
   header: {
-    
+    height: 75,
+    backgroundColor: '#f8f8f8',
     justifyContent: 'center',
     alignItems: 'center',
-    marginVertical: 20,
-    
+    paddingTop: 35,
+  },
+  headerTitle: {
+    color: '#6200ee',
+    fontSize: 20,
+    fontWeight: 'bold',
   },
   headerText: {
-    
     fontWeight: 'bold',
     fontSize: 24,
   },
@@ -166,5 +170,5 @@ const styles = StyleSheet.create({
     color: '#6200ea',
     marginTop: 10,
     textDecorationLine: 'underline',
-  },
+  },
 })

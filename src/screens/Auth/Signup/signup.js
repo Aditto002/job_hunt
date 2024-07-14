@@ -75,7 +75,13 @@ const Signup = () => {
       const response = await axios.post("http://192.168.1.228:3000/api/auth/singup", formData);
       console.log(response.data.data);
       dispatch(signInSuccess(response.data.data))
-      navigation.navigate('Profile')
+      if(response.data.data.userType == "Admin"){
+        navigation.navigate('AdminScreen')
+    }else{
+
+      navigation.navigate('Profile');
+    }
+      // navigation.navigate('Profile')
     } catch (error) {
       dispatch(signInFailure(error));
       console.error("Error fetching data: ", error);
@@ -89,24 +95,30 @@ const Signup = () => {
     behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
     style={{ flex: 1 }}
   >
-    <ScrollView contentContainerStyle={{ flexGrow: 1 }} keyboardShouldPersistTaps="always">
-      <View style={styles.container}>
-        <Text variant="titleLarge" style={{ margin: 8, marginTop: 10, fontWeight: "bold" }}> Hey, Welcome</Text>
-        <Text style={styles.text_space} variant="labelLarge">Find your best job in Jobnest</Text>
-        {errormsg && <Text style={{ color: 'red', alignItems: "center" }}>{errormsg}</Text>}
+      <ScrollView contentContainerStyle={{ flexGrow: 1 }} keyboardShouldPersistTaps="always">
+        <View style={styles.container}>
+          <Text variant="titleLarge" style={styles.welcomeText}> Hey, Welcome</Text>
+          <Text style={styles.text_space} variant="labelLarge">Find your best job in Jobnest</Text>
+          {errormsg && <Text style={styles.errorText}>{errormsg}</Text>}
 
-        <View style={styles.radioButton_div}>
-        <Text style={styles.radioButton_title}>Login As</Text>
-        <View style={styles.radioButton_inner_div}>
-        <Text style={styles.radioButton_text}>User</Text>
-        <RadioButton value='User' status={userType == 'User'  ? 'checked' : 'unchecked'} onPress={()=>setUserType('User')}/>
-        </View>
+          <View style={styles.toggleButtonContainer}>
+            <Text style={styles.radioButton_title}>SignUp As</Text>
+            <View style={styles.toggleButtons}>
+              <TouchableOpacity
+                style={[styles.toggleButton, userType === 'User' && styles.selectedButton]}
+                onPress={() => setUserType('User')}
+              >
+                <Text style={[styles.toggleButtonText, userType === 'User' && styles.selectedButtonText]}>User</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={[styles.toggleButton, userType === 'Admin' && styles.selectedButton]}
+                onPress={() => setUserType('Admin')}
+              >
+                <Text style={[styles.toggleButtonText, userType === 'Admin' && styles.selectedButtonText]}>Admin</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
 
-        <View style={styles.radioButton_inner_div}>
-        <Text style={styles.radioButton_text}>Admin</Text>
-        <RadioButton value='Admin' status={userType == 'Admin'  ? 'checked' : 'unchecked'}  onPress={()=>setUserType('Admin')}/>
-        </View>
-        </View>
        
 
 
@@ -206,87 +218,131 @@ const Signup = () => {
 export default Signup;
 
 const styles = StyleSheet.create({
-container: {
-  flex: 1,
-  alignItems: "center",
-  justifyContent: "center",
-  backgroundColor: '#fff',
-  padding: 20,
-},
-subcontainer: {
-  width: "100%",
-  padding: 20,
-  backgroundColor: '#ffffff',
-  borderRadius: 10,
-  shadowColor: '#000',
-  shadowOffset: { width: 0, height: 2 },
-  shadowOpacity: 0.2,
-  shadowRadius: 2,
-  elevation: 5,
-},
-f_icons: {
-  position: 'absolute',
-  right: 10,
-  top: '50%',
-  transform: [{ translateY: -12 }],
-  color: 'red',
-  fontSize: 24,
-},
-f_icons_G: {
-  position: 'absolute',
-  right: 10,
-  top: '50%',
-  transform: [{ translateY: -12 }],
-  color: 'green',
-  fontSize: 24,
-},
-inputContainer: {
-  position: 'relative',
-  marginVertical: 10,
-},
-textInput: {
-  paddingRight: 40,
-  backgroundColor: '#f0f0f0',
-},
-iconContainer: {
-  position: 'absolute',
-  right: 10,
-  top: '50%',
-  transform: [{ translateY: -12 }],
-},
-pass_icons: {
-  color: '#333',
-  fontSize: 24,
-},
-text_space: {
-  marginBottom: 20,
-  textAlign: 'center',
-  color: '#666',
-},
-radioButton_div:{
-display:'flex',
-flexDirection:'row',
-justifyContent:'space-between',
-alignItems:'center',
-marginBottom:20
+  container: {
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: '#f5f5f5',
+    padding: 20,
   },
-  radioButton_inner_div:{
- display:'flex',
-flexDirection:'row',
-justifyContent:'center',
-alignItems:'center',
-marginLeft:40
-  
+  subcontainer: {
+    width: "100%",
+    padding: 20,
+    backgroundColor: '#ffffff',
+    borderRadius: 10,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.2,
+    shadowRadius: 2,
+    elevation: 5,
+    marginTop: 20,
   },
-  radioButton_title:{
-  fontSize:18,
-  color:'#420475',
-  marginRight: 25
+  f_icons: {
+    position: 'absolute',
+    right: 10,
+    top: '50%',
+    transform: [{ translateY: -12 }],
+    color: 'red',
+    fontSize: 24,
   },
-  radioButton_text:{
-  fontSize:16,
-  color:'black'
+  f_icons_G: {
+    position: 'absolute',
+    right: 10,
+    top: '50%',
+    transform: [{ translateY: -12 }],
+    color: 'green',
+    fontSize: 24,
+  },
+  inputContainer: {
+    position: 'relative',
+    marginVertical: 10,
+  },
+  textInput: {
+    paddingRight: 40,
+    backgroundColor: '#f0f0f0',
+  },
+  iconContainer: {
+    position: 'absolute',
+    right: 10,
+    top: '50%',
+    transform: [{ translateY: -12 }],
+  },
+  pass_icons: {
+    color: '#333',
+    fontSize: 24,
+  },
+  text_space: {
+    marginBottom: 20,
+    textAlign: 'center',
+    color: '#666',
+  },
+  toggleButtonContainer: {
+    marginBottom: 20,
+    alignItems: 'center',
+  },
+  toggleButtons: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    width: '80%',
+  },
+  toggleButton: {
+    flex: 1,
+    padding: 10,
+    borderWidth: 1,
+    borderColor: '#6200ee',
+    borderRadius: 5,
+    alignItems: 'center',
+    marginHorizontal: 5,
+  },
+  selectedButton: {
+    backgroundColor: '#6200ee',
+  },
+  toggleButtonText: {
+    color: '#6200ee',
+    fontSize: 16,
+  },
+  selectedButtonText: {
+    color: '#fff',
+  },
+  signUpButton: {
+    marginTop: 5,
+    backgroundColor: '#6200ee'
+  },
+  welcomeText: {
+    margin: 8,
+    marginTop: 10,
+    fontWeight: "bold",
+    fontSize: 24,
+    color: '#6200ee'
+  },
+  errorText: {
+    color: 'red',
+    alignItems: "center",
+    marginBottom: 15
+  },
+  validationText: {
+    marginLeft: 10,
+    color: 'red'
+  },
+  radioButton_title: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    marginBottom: 10,
+    color: '#6200ee',
+    textAlign: 'center',
+  },
+  loginContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    marginTop: 5
+  },
+  loginButton: {
+    padding: 0,
+    margin: 0,
+    color: '#6200ee'
   }
+
 
 
 });

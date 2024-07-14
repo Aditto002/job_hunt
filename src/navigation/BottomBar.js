@@ -15,6 +15,16 @@ const BottomBar = () => {
     setActiveItem(item);
   };
 
+  const handlePress = () => {
+    if (!currentUser) {
+      navigation.navigate('Login');
+    } else if (currentUser.userType === 'Admin') {
+      navigation.navigate('AdminScreen');
+    } else {
+      navigation.navigate('Profile');
+    }
+  };
+
   return (
     <View style={styles.container}>
       <TouchableOpacity
@@ -59,24 +69,29 @@ const BottomBar = () => {
             )
           } 
       </TouchableOpacity> */}
-      <TouchableOpacity
-        style={[styles.bottom_bar, activeItem === 'profile' && styles.active]}
-        onPress={() => navigation.navigate(currentUser ? 'Profile' : 'Login')}
-      >
-        {
-          currentUser ? (
-            <>
-              <Feather name={'user'} style={styles.f_icons_G} />
-              <Text style={styles.profile_style}>Profile</Text>
-            </>
-          ) : (
-            <>
-              <Feather name={'log-in'} style={styles.f_icons_G} />
-              <Text style={styles.profile_style}>Login</Text>
-            </>
-          )
-        }
-      </TouchableOpacity>
+         <TouchableOpacity
+      style={[styles.bottom_bar, activeItem === 'profile' && styles.active]}
+      onPress={handlePress}
+    >
+      {
+        !currentUser ? (
+          <>
+            <Feather name={'log-in'} style={styles.f_icons_G} />
+            <Text style={styles.profile_style}>Login</Text>
+          </>
+        ) : currentUser.userType === 'Admin' ? (
+          <>
+            <Feather name={'user'} style={styles.f_icons_G} />
+            <Text style={styles.profile_style}>Profile</Text>
+          </>
+        ) : (
+          <>
+            <Feather name={'user'} style={styles.f_icons_G} />
+            <Text style={styles.profile_style}>Profile</Text>
+          </>
+        )
+      }
+    </TouchableOpacity>
     </View>
   );
 };

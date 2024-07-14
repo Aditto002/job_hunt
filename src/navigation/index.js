@@ -23,9 +23,9 @@ const Homebg = () => {
         onPlaybackStatusUpdate={(status) => setStatus(() => status)}
       />
       <View style={styles.overlay}>
-        <Text style={styles.mainText}>Wellcome</Text>
-        <Text style={styles.subText}>To JobHunt</Text>
-        <Text style={styles.tagline}>Find a Job And Build Futures</Text>
+        <Text style={styles.mainText}>Welcome</Text>
+        <Text style={styles.subText}>To JobNest</Text>
+        <Text style={styles.tagline}>Find a Job And Build Future</Text>
       </View>
       <View style={styles.buttons}>
         <TouchableOpacity
@@ -87,6 +87,7 @@ const styles = StyleSheet.create({
         alignItems: "center",
         position: "absolute",
         bottom: 30,
+        top:'70%',
         left: 0,
         right: 0,
       },

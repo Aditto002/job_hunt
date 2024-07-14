@@ -11,6 +11,7 @@ import ChatScreen from '../screens/Chat/ChatScreen.js';
 import GetStarted from '../screens/GetStarted/GetStarted.js';
 import Homebg from './index.js';
 import AdminScreen from '../screens/AdminScreens/AdminScreen.js';
+import PostJob from '../screens/AdminScreens/addPost.js';
 // import { createDrawerNavigator } from '@react-navigation/drawer';
 
 
@@ -22,7 +23,7 @@ const StackNav = ()=>{
     
     <Stack.Navigator
       
-      initialRouteName="GetStarted"
+      initialRouteName="Homebg"
       screenListeners={({ route }) => {
         setRouteName(route.name);
       }}
@@ -38,8 +39,8 @@ const StackNav = ()=>{
       }}
     >
       <Stack.Screen
-        name="GetStarted"
-        component={GetStarted}
+        name="PostJob"
+        component={PostJob}
         options={{ headerShown: false }}
       />
       <Stack.Screen
@@ -85,7 +86,7 @@ const StackNav = ()=>{
       options={{ headerBackVisible: false }}
       />
     </Stack.Navigator>
-    {routeName !== 'GetStarted' && <BottomBar />}
+    {routeName !== 'Homebg' && <BottomBar />}
     </>
     
   );

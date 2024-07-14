@@ -196,6 +196,7 @@ const styles = StyleSheet.create({
     marginTop: 8,
   },
   container: {
+    marginTop: 100,
     position: 'relative',
     alignItems: 'center',
     justifyContent: 'center',

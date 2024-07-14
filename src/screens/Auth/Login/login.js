@@ -18,6 +18,7 @@ const Login = () => {
   const { loading, error } = useSelector(state => state.user);
   const [showPassword,setShowPassword] = useState(false);
   const [passwords,setPasswords]=useState('');
+  
 
   const loginInfo = async () => {
     try {
@@ -76,9 +77,12 @@ const Login = () => {
         <Button mode="contained" style={styles.button} onPress={loginInfo} loading={loading}>
           Login
         </Button>
-        <Button mode="text" style={styles.button} onPress={() => navigation.navigate('Signup')}>
-          New to JobNest? Sign up here
-        </Button>
+        <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "center", marginTop: 5 }}>
+            <Text style={{ marginRight: 0 }}>Don't have an account !!</Text>
+            <Button icon="" mode="text" style={{ padding: 0, margin: 0 }} onPress={() => navigation.navigate('Signup')}>
+              SignUp
+            </Button>
+          </View>
       </View>
     </View>
   );
