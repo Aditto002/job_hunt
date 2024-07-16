@@ -12,6 +12,7 @@ import GetStarted from '../screens/GetStarted/GetStarted.js';
 import Homebg from './index.js';
 import AdminScreen from '../screens/AdminScreens/AdminScreen.js';
 import PostJob from '../screens/AdminScreens/addPost.js';
+import Jobdetails from '../screens/JobPost/jobdetails.js';
 // import { createDrawerNavigator } from '@react-navigation/drawer';
 
 
@@ -42,6 +43,11 @@ const StackNav = ()=>{
       <Stack.Screen
         name="PostJob"
         component={PostJob}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="Jobdetails"
+        component={Jobdetails}
         options={{ headerShown: false }}
       />
       <Stack.Screen

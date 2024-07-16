@@ -10,6 +10,8 @@ import Feather from '@expo/vector-icons/Feather';
 import { updateUserStart, updateUserSuccess, updateUserFailur,signOut } from '../../redux/user/userSlice.js';
 import axios from 'axios';
 import { useNavigation } from '@react-navigation/native';
+
+
 const Profile = () => {
   const dispatch = useDispatch();
   const { currentUser } = useSelector(state => state.user);

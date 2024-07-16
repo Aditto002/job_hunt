@@ -2,8 +2,10 @@ import React, { useEffect, useState } from 'react';
 import { StyleSheet, View, SafeAreaView, FlatList, TouchableOpacity } from 'react-native';
 import { Appbar, Text, Searchbar } from 'react-native-paper';
 import axios from 'axios';
+import { NavigationContainer, useNavigation } from '@react-navigation/native';
 
-const Home = ({ navigation }) => {
+const Home = () => {
+  const navigation = useNavigation();
   const [jobs, setJobs] = useState([]);
   const [jobCounts, setJobCounts] = useState({ totalJobs: 0, partTimeJobs: 0, fullTimeJobs: 0 });
   const [searchQuery, setSearchQuery] = useState('');
@@ -35,10 +37,10 @@ const Home = ({ navigation }) => {
 
   const renderJobItem = ({ item }) => (
     <View style={styles.jobItem}>
-      <Text style={styles.jobTitle}>{item.jobTitle}</Text>
+      <Text style={styles.JobTitle}>{item.jobTitle}</Text>
       <Text style={styles.jobDetails}>JobType: {item.jobType} Time</Text>
       <Text style={styles.jobDetails}>Salary:{item.salary}</Text>
-      <TouchableOpacity onPress={() => navigation.navigate('JobDetails', { jobId: item.id })}>
+      <TouchableOpacity onPress={() => navigation.navigate('Jobdetails', { job: item})}>
         <Text style={styles.jobLink}>View Details</Text>
       </TouchableOpacity>
     </View>
@@ -137,7 +139,7 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 5 },
     elevation: 5,
   },
-  jobTitle: {
+  JobTitle: {
     fontSize: 18,
     fontWeight: 'bold',
   },
