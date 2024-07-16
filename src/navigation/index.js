@@ -15,7 +15,7 @@ const Homebg = () => {
         ref={video}
         style={styles.video}
         source={{
-          uri: "https://media.istockphoto.com/id/1384369489/video/a-woman-typing-over-the-keyboard-of-her-laptop-while-sitting-in-a-coffee-shop.mp4?s=mp4-640x640-is&k=20&c=SyWggv_tGnt6FFl0Stm2JMWAekfgu7B2DfrdPtDC4yM=",
+          uri: "https://videos.pexels.com/video-files/6700265/6700265-uhd_1440_2560_25fps.mp4",
         }}
         resizeMode={ResizeMode.COVER}
         shouldPlay
@@ -61,12 +61,14 @@ const styles = StyleSheet.create({
         justifyContent: "center",
         alignItems: "center",
         backgroundColor: "rgba(0, 0, 0, 0.5)",
+        paddingBottom: 300,
       },
       mainText: {
         color: "white",
         fontSize: 68,
         fontWeight: "bold",
         textAlign: "center",
+  
       },
       subText: {
         color: "white",

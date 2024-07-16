@@ -18,6 +18,7 @@ import PostJob from '../screens/AdminScreens/addPost.js';
 const StackNav = ()=>{
   const Stack = createNativeStackNavigator();
   const [routeName, setRouteName] = React.useState('');
+
   return(
     <>
     

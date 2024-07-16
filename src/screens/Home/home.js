@@ -1,126 +1,141 @@
-import React from 'react';
-import { Button, StyleSheet, View, SafeAreaView, FlatList, TouchableOpacity, TextInput } from 'react-native';
-import { NavigationContainer, useNavigation } from '@react-navigation/native';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { Appbar, SegmentedButtons, Text, Searchbar } from 'react-native-paper';
-import { Icon, MD3Colors } from 'react-native-paper';
+import React, { useEffect, useState } from 'react';
+import { StyleSheet, View, SafeAreaView, FlatList, TouchableOpacity } from 'react-native';
+import { Appbar, Text, Searchbar } from 'react-native-paper';
+import axios from 'axios';
 
-export const Home = () => {
-  const [searchQuery, setSearchQuery] = React.useState('');
+const Home = ({ navigation }) => {
+  const [jobs, setJobs] = useState([]);
+  const [jobCounts, setJobCounts] = useState({ totalJobs: 0, partTimeJobs: 0, fullTimeJobs: 0 });
+  const [searchQuery, setSearchQuery] = useState('');
 
   const onChangeSearch = query => setSearchQuery(query);
 
-  const jobs = [
-    { id: '1', title: 'Software Developer', location: 'Sylhet, AuthLab', type: 'Full-time' },
-    { id: '2', title: 'Project Manager', location: 'Dhaka, ABCD', type: 'Part-Time' },
-    { id: '3', title: 'Software Developer', location: 'Sylhet, AuthLab', type: 'Full-time' },
-    { id: '4', title: 'Project Manager', location: 'Dhaka, ABCD', type: 'Part-Time' },
-    { id: '5', title: 'Software Developer', location: 'Sylhet, AuthLab', type: 'Full-time' },
-    { id: '6', title: 'Project Manager', location: 'Dhaka, ABCD', type: 'Part-Time' },
-    { id: '7', title: 'Software Developer', location: 'Sylhet, AuthLab', type: 'Full-time' },
-    { id: '8', title: 'Project Manager', location: 'Dhaka, ABCD', type: 'Part-Time' },
-    { id: '9', title: 'Software Developer', location: 'Sylhet, AuthLab', type: 'Full-time' },
-    { id: '10', title: 'Project Manager', location: 'Dhaka, ABCD', type: 'Part-Time' },
-    { id: '11', title: 'Software Developer', location: 'Sylhet, AuthLab', type: 'Full-time' },
-    { id: '12', title: 'Project Manager', location: 'Dhaka, ABCD', type: 'Part-Time' },
-  ];
+  const fetchJobs = async () => {
+    try {
+      const response = await axios.get('http://192.168.1.228:3000/api/job/jobs');
+      setJobs(response.data);
+    } catch (error) {
+      console.error('Error fetching jobs:', error);
+    }
+  };
+
+  const fetchJobCounts = async () => {
+    try {
+      const response = await axios.get('http://192.168.1.228:3000/api/job/job-counts');
+      setJobCounts(response.data);
+    } catch (error) {
+      console.error('Error fetching job counts:', error);
+    }
+  };
+
+  useEffect(() => {
+    fetchJobs();
+    fetchJobCounts();
+  }, []);
 
   const renderJobItem = ({ item }) => (
     <View style={styles.jobItem}>
-      <Text style={styles.jobTitle}>{item.title}</Text>
-      <Text style={styles.jobDetails}>{item.location} - {item.type}</Text>
+      <Text style={styles.jobTitle}>{item.description}</Text>
+      <Text style={styles.jobDetails}>Salary: {item.payment}</Text>
+      <Text style={styles.jobDetails}>Experience: {item.workHours}</Text>
       <TouchableOpacity onPress={() => navigation.navigate('JobDetails', { jobId: item.id })}>
         <Text style={styles.jobLink}>View Details</Text>
       </TouchableOpacity>
     </View>
   );
 
-  const navigation = useNavigation();
-
   return (
-    <>
-      <View>
-        <Appbar.Header style={styles.homeheader}>
-          <Icon source="home" color={MD3Colors.black} size={28} />
-          <Appbar.Content style={{ paddingLeft: 10 }} title="Home" />
-          <Appbar.Content style={{ paddingLeft: 140 }} title="JobNest" onPress={() => navigation.navigate('Home')} />
-        </Appbar.Header>
+    <SafeAreaView style={styles.mainContainer}>
+      <Appbar.Header style={styles.homeheader}>
+        <Appbar.Content style={{ paddingLeft: 10 }} title="Home" />
+        <Appbar.Content style={{ paddingLeft: 140 }} title="JobNest" onPress={() => navigation.navigate('Home')} />
+      </Appbar.Header>
 
-        <View style={styles.containers}>
-          <View style={styles.Sub_container}>
-            <Text>Total Jobs</Text>
-            <Text>6</Text>
-          </View>
-          <View style={styles.Sub_container}>
-            <Text>Part Time</Text>
-            <Text>2</Text>
-          </View>
-          <View style={styles.Sub_container}>
-            <Text>Full Time</Text>
-            <Text>4</Text>
-          </View>
+      <View style={styles.containers}>
+        <View style={styles.subContainer}>
+          <Text>Total Jobs</Text>
+          <Text>{jobCounts.totalJobs}</Text>
         </View>
-
-
+        <View style={styles.subContainer}>
+          <Text>Part Time</Text>
+          <Text>{jobCounts.partTimeJobs}</Text>
+        </View>
+        <View style={styles.subContainer}>
+          <Text>Full Time</Text>
+          <Text>{jobCounts.fullTimeJobs}</Text>
+        </View>
       </View>
 
-      <View style={styles.container}>
-        
-        <FlatList
-          data={jobs}
-          renderItem={renderJobItem}
-          keyExtractor={item => item.id}
-          style={styles.jobList}
-        />
-      </View>
-    </>
+      <Searchbar
+        placeholder="Search"
+        onChangeText={onChangeSearch}
+        value={searchQuery}
+        style={styles.searchbar}
+      />
+
+      <FlatList
+        data={jobs}
+        renderItem={renderJobItem}
+        keyExtractor={item => item._id}
+        style={styles.jobList}
+        contentContainerStyle={styles.jobListContainer}
+      />
+    </SafeAreaView>
   );
 };
 
 export default Home;
 
 const styles = StyleSheet.create({
-  homeheader: {
-    marginLeft: 10,
-    display: 'flex',
-    justifyContent: 'space-between',
+  mainContainer: {
+    flex: 1,
+    backgroundColor: '#f0f4f8',
   },
   containers: {
-    display: 'flex',
     flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginLeft: 20,
-    marginRight: 20,
-    marginTop: 30,
+    justifyContent: 'space-around',
+    marginVertical: 10,
   },
-  Sub_container: {
-    borderColor: "black",
-    paddingHorizontal: 20,
-    paddingVertical: 30,
-    color: 'white',
-    elevation: 4,
+  homeheader: {
+    marginTop: -50,
+    height: 80, 
+    backgroundColor: '#D6E3E8',
+    justifyContent: 'center',
     alignItems: 'center',
-    borderRadius: 5,
   },
-  seardhstyles: {
+  subContainer: {
+    backgroundColor: '#fff',
+    paddingHorizontal: 20,
+    paddingVertical: 10,
+    borderRadius: 8,
+    alignItems: 'center',
+    shadowColor: '#000',
+    shadowOpacity: 0.1,
+    shadowRadius: 10,
+    shadowOffset: { width: 0, height: 5 },
+    elevation: 5,
+  },
+  searchbar: {
     marginHorizontal: 20,
-    marginVertical: 30,
-  },
-  container: {
-    flex: 1,
-    padding: 20,
-    backgroundColor: '#f8f8f8',
+    marginVertical: 10,
   },
   jobList: {
-    flex: 1,
+    flexGrow: 1,
+    paddingHorizontal: 20,
+  },
+  jobListContainer: {
+    paddingBottom: 20,
   },
   jobItem: {
-    padding: 15,
     backgroundColor: '#fff',
-    borderColor: '#ddd',
-    borderWidth: 1,
-    borderRadius: 5,
+    padding: 15,
     marginBottom: 10,
+    borderRadius: 8,
+    shadowColor: '#000',
+    shadowOpacity: 0.1,
+    shadowRadius: 10,
+    shadowOffset: { width: 0, height: 5 },
+    elevation: 5,
   },
   jobTitle: {
     fontSize: 18,
