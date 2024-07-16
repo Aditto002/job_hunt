@@ -35,9 +35,9 @@ const Home = ({ navigation }) => {
 
   const renderJobItem = ({ item }) => (
     <View style={styles.jobItem}>
-      <Text style={styles.jobTitle}>{item.description}</Text>
-      <Text style={styles.jobDetails}>Salary: {item.payment}</Text>
-      <Text style={styles.jobDetails}>Experience: {item.workHours}</Text>
+      <Text style={styles.jobTitle}>{item.jobTitle}</Text>
+      <Text style={styles.jobDetails}>JobType: {item.jobType} Time</Text>
+      <Text style={styles.jobDetails}>Salary:{item.salary}</Text>
       <TouchableOpacity onPress={() => navigation.navigate('JobDetails', { jobId: item.id })}>
         <Text style={styles.jobLink}>View Details</Text>
       </TouchableOpacity>

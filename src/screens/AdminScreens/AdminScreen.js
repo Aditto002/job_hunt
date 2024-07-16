@@ -152,3 +152,11 @@ const styles = StyleSheet.create({
 });
 
 export default AdminScreen;
+// Job Title
+// Company
+// Location
+// job type (part-time or full-time)
+// Salary 
+// experience 
+// Qualifications
+// descripsion

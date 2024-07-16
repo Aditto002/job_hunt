@@ -57,9 +57,9 @@ const JobPost = () => {
         keyExtractor={(item) => item._id}
         renderItem={({ item }) => (
           <View style={styles.jobCard}>
-            <Text style={styles.jobTitle}>{item.description}</Text>
-            <Text style={styles.jobDetail}>Salary: {item.payment}</Text>
-            <Text style={styles.jobDetail}>Experience: {item.workHours}</Text>
+            <Text style={styles.jobTitle}>{item.jobTitle}</Text>
+            <Text style={styles.jobDetail}>JobType: {item.jobType} Time</Text>
+            <Text style={styles.jobDetail}>Salary:{item.salary}</Text>
             <TouchableOpacity onPress={() => Linking.openURL(item.link)}>
               <Text style={styles.learnMore}>Learn more</Text>
             </TouchableOpacity>
