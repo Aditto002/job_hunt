@@ -6,7 +6,55 @@ import MainNavigation from './src/navigation/MainNavigation.js';
 import { Provider } from 'react-redux';
 import store, { persistor } from './src/redux/store.js';
 import { PersistGate } from 'redux-persist/integration/react';
-// import { createDrawerNavigator } from '@react-navigation/drawer';
+import Toast, { BaseToast, ErrorToast } from 'react-native-toast-message';
+
+const toastConfig = {
+  success: (props) => (
+    <BaseToast
+      {...props}
+      style={{ 
+        borderLeftColor: 'green',
+        borderLeftWidth: 7,
+        width:'90%',
+        height:70,
+        borderRightColor:'green',
+        borderRightWidth: 7
+       }}
+      contentContainerStyle={{ paddingHorizontal: 15 }}
+      text1Style={{
+        fontSize: 18,
+        fontWeight: '700'
+      }}
+      text2Style={{
+        fontSize:14
+      }}
+    />
+  ),
+
+  error: (props) => (
+    <ErrorToast
+      {...props}
+      text2NumberOfLines={3}
+      style={{ 
+        borderLeftColor: 'red',
+        borderLeftWidth: 7,
+        width:'90%',
+        height:70,
+        borderRightColor:'red',
+        borderRightWidth: 7
+       }}
+      contentContainerStyle={{ paddingHorizontal: 15 }}
+      text1Style={{
+        fontSize: 18,
+        fontWeight: '700'
+      }}
+      text2Style={{
+        fontSize:14
+      }}
+    />
+  ),
+
+};
 
 export default function App() {
   return (
@@ -16,6 +64,7 @@ export default function App() {
           <MainNavigation >
           
           </MainNavigation>
+          <Toast config={toastConfig}/>
         </PaperProvider>
       </PersistGate>
     </Provider>

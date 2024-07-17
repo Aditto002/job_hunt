@@ -1,7 +1,7 @@
 import { ScrollView, StyleSheet, View, TouchableOpacity, KeyboardAvoidingView, Platform, Alert } from 'react-native';
 import React, { useRef, useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
-import { Button, Text, TextInput } from 'react-native-paper';
+import { Appbar, Button, Text, TextInput } from 'react-native-paper';
 import axios from 'axios';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import EvilIcons from '@expo/vector-icons/EvilIcons';
@@ -10,6 +10,7 @@ import Feather from '@expo/vector-icons/Feather';
 import { signInStart,signInSuccess,signInFailure } from '../../../redux/user/userSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import { RadioButton } from 'react-native-paper';
+import Toast from 'react-native-toast-message';
 
 const Signup = () => {
   const [errormsg, setErrormsg] = useState(null);
@@ -76,13 +77,31 @@ const Signup = () => {
       console.log(response.data.data);
       dispatch(signInSuccess(response.data.data))
       if(response.data.data.userType == "Admin"){
+        Toast.show({
+          type:'success',
+          text1:'Welcome To JobNest',
+          text2:"Signed Up successfully",
+          visibilityTime:5000
+        })
         navigation.navigate('AdminScreen')
     }else{
+      Toast.show({
+        type:'success',
+        text1:'Welcome To JobNest',
+        text2:"Signed Up successfully",
+        visibilityTime:5000
+      })
 
       navigation.navigate('Profile');
-    }
-      // navigation.navigate('Profile')
+    };
     } catch (error) {
+      Toast.show({
+        type:'error',
+        text1:'!!',
+        text2:"something is wrong",
+        visibilityTime:5000
+      })
+      
       dispatch(signInFailure(error));
       console.error("Error fetching data: ", error);
     }
@@ -95,6 +114,13 @@ const Signup = () => {
     behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
     style={{ flex: 1 }}
   >
+    <><Appbar.Header>
+        <Appbar.BackAction onPress={() => navigation.goBack()} />
+        <Appbar.Content title="Register" />
+      
+      </Appbar.Header></>
+
+
       <ScrollView contentContainerStyle={{ flexGrow: 1 }} keyboardShouldPersistTaps="always">
         <View style={styles.container}>
           <Text variant="titleLarge" style={styles.welcomeText}> Hey, Welcome</Text>
@@ -224,6 +250,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     backgroundColor: '#f5f5f5',
     padding: 20,
+    marginTop: -70
   },
   subcontainer: {
     width: "100%",

@@ -2,6 +2,7 @@ import axios from 'axios';
 import React, { useState } from 'react';
 import { View, StyleSheet, ScrollView, Alert } from 'react-native';
 import { TextInput, Button, Card, Title, Paragraph, RadioButton, List, Appbar } from 'react-native-paper';
+import Toast from 'react-native-toast-message';
 
 const PostJob = ({ navigation }) => {
   const [title, setTitle] = useState('');
@@ -25,7 +26,12 @@ const PostJob = ({ navigation }) => {
       
       console.log('Status:', response.data.status); 
       if(response.data.status == 'success'){
-        Alert.alert("post");
+        Toast.show({
+          type:'success',
+          text1:'Post add',
+          text2:"Post add",
+          visibilityTime:5000
+        })
       }
 
     } catch (error) {

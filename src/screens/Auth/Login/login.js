@@ -1,12 +1,12 @@
 import { StyleSheet, View,TouchableOpacity } from 'react-native'
-import { Button, TextInput, Text } from 'react-native-paper';
-import React, { useState } from 'react'
+import { Button, TextInput, Text, Appbar } from 'react-native-paper';
+import React, { useEffect, useState } from 'react'
 import { NavigationContainer ,useNavigation} from '@react-navigation/native';
 import axios from 'axios';
 import { signInStart,signInSuccess,signInFailure } from '../../../redux/user/userSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import Feather from '@expo/vector-icons/Feather';
-
+import Toast from 'react-native-toast-message';
 
 
 
@@ -19,7 +19,16 @@ const Login = () => {
   const [showPassword,setShowPassword] = useState(false);
   const [passwords,setPasswords]=useState('');
   
-
+  // useEffect(()=>{
+  //   setTimeout(()=>{
+  //    Toast.show({
+  //      type:'success',
+  //      text1:'Wellcome',
+  //      text2:"hii",
+  //      visibilityTime:10000
+  //    })
+  //   },2000)
+  //  },[])
   const loginInfo = async () => {
     try {
       dispatch(signInStart());
@@ -32,18 +41,42 @@ const Login = () => {
       dispatch(signInSuccess(response.data.data.user));
       console.log(response.data.userType)
       if(response.data.userType == "Admin"){
-          navigation.navigate('AdminScreen')
-      }else{
 
+        Toast.show({
+          type:'success',
+          text1:'Welcome To JobNest',
+          text2:"Signed in successfully",
+          visibilityTime:5000
+        })
+
+          navigation.navigate('AdminScreen');
+      }else{
+        Toast.show({
+          type:'success',
+          text1:'Wellcome JobNest',
+          text2:"Signed in successfully",
+          visibilityTime:5000
+        })
         navigation.navigate('Home');
       }
     } catch (error) {
+      Toast.show({
+        type:'error',
+        text1:'!!',
+        text2:"something is wrong",
+        visibilityTime:5000
+      })
       dispatch(signInFailure(error));
       console.error("Error fetching data: ", error);
     }
   };
 
   return (
+    <>
+    <Appbar.Header>
+        <Appbar.BackAction onPress={() => navigation.goBack()} />
+        <Appbar.Content title="Login" />
+      </Appbar.Header>
     <View style={styles.container}>
       <Text style={styles.title}>Welcome Back!</Text>
       <View style={styles.form}>
@@ -64,15 +97,9 @@ const Login = () => {
           // secureTextEntry 
           theme={{ colors: { primary: '#3f51b5', underlineColor: 'transparent' } }}
         />
-        {/* <TouchableOpacity style={styles.iconContainer} onPress={() => setShowPassword(!showPassword)}>
-              {
-                passwords.length < 1 ? null : !showPassword ? (
-                  <Feather name={'eye-off'} style={styles.pass_icons} />
-                ) : (
-                  <Feather name={'eye'} style={styles.pass_icons} />
-                )
-              }
-            </TouchableOpacity> */}
+        <TouchableOpacity style={styles.iconContainer} onPress={() => setShowPassword(!showPassword)}>
+              <Feather name={showPassword ? 'eye' : 'eye-off'} style={styles.pass_icons} />
+            </TouchableOpacity>
             </View>
         <Button mode="contained" style={styles.button} onPress={loginInfo} loading={loading}>
           Login
@@ -85,6 +112,7 @@ const Login = () => {
           </View>
       </View>
     </View>
+    </>
   );
 };
 
@@ -95,6 +123,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingHorizontal: 20,
     backgroundColor: '#fff',
+    // paddingTop: -80
   },
   title: {
     fontSize: 24,
@@ -103,12 +132,13 @@ const styles = StyleSheet.create({
   },
   form: {
     width: '100%',
-    padding: 20,
+    padding: 15,
     borderRadius: 10,
     backgroundColor: '#f2f2f2',
+    marginBottom: 100
   },
   input: {
-    marginBottom: 10,
+    margiBottom: 10,
     backgroundColor: '#fff',
     borderRadius: 5,
   },
@@ -125,6 +155,16 @@ const styles = StyleSheet.create({
   inputContainer: {
     position: 'relative',
     marginVertical: 10,
+  },
+  iconContainer: {
+    position: 'absolute',
+    right: 10,
+    top: '50%',
+    transform: [{ translateY: -12 }],
+  },
+  pass_icons: {
+    fontSize: 22,
+    color: 'black',
   },
 });
 

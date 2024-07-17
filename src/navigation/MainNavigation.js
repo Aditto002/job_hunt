@@ -13,7 +13,9 @@ import Homebg from './index.js';
 import AdminScreen from '../screens/AdminScreens/AdminScreen.js';
 import PostJob from '../screens/AdminScreens/addPost.js';
 import Jobdetails from '../screens/JobPost/jobdetails.js';
+import ApplyJob from '../screens/JobPost/applyJob.js';
 // import { createDrawerNavigator } from '@react-navigation/drawer';
+// import Toast from 'react-native-toast-message';
 
 
 const StackNav = ()=>{
@@ -77,6 +79,10 @@ const StackNav = ()=>{
         component={JobPost}
         options={{ headerBackVisible: false }} 
       />
+      <Stack.Screen 
+      name="ApplyJob" 
+      component={ApplyJob}
+       />
       <Stack.Screen
         name="Profile"
         component={Profile}
@@ -93,7 +99,7 @@ const StackNav = ()=>{
       options={{ headerBackVisible: false }}
       />
     </Stack.Navigator>
-    {routeName !== 'Homebg' && <BottomBar />}
+    {routeName !== 'Homebg' && routeName !== 'Login' && routeName !== 'Signup' && <BottomBar />}
     </>
     
   );

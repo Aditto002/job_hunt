@@ -74,7 +74,7 @@ const Home = () => {
         value={searchQuery}
         style={styles.searchbar}
       />
-
+      
       <FlatList
         data={jobs}
         renderItem={renderJobItem}

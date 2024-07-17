@@ -10,6 +10,7 @@ import Feather from '@expo/vector-icons/Feather';
 import { updateUserStart, updateUserSuccess, updateUserFailur,signOut } from '../../redux/user/userSlice.js';
 import axios from 'axios';
 import { useNavigation } from '@react-navigation/native';
+import Toast from 'react-native-toast-message';
 
 
 const Profile = () => {
@@ -78,7 +79,12 @@ const Profile = () => {
       const downloadURL = await ref.getDownloadURL();
       setImageLoading(false);
       setIsUploaded(true);
-      Alert.alert('Photo Uploaded !!');
+      Toast.show({
+        type:'success',
+        text1:'Photo Uploaded',
+        text2:"Photo Uploaded",
+        visibilityTime:5000
+      })
       setProfilePicture(downloadURL);
     } catch (err) {
       console.error(err);
@@ -106,17 +112,30 @@ const Profile = () => {
       }
 
       if (Object.keys(formData).length === 0) {
-        Alert.alert("No changes made");
+        Toast.show({
+          type:'error',
+          text1:'No Change',
+          text2:"Change something and update",
+          visibilityTime:5000
+        })
         return;
       }
 
       const response = await axios.post(`http://192.168.1.228:3000/api/user/update/${currentUser._id}`, formData);
+      console.log(response.status);
+      if(response.status == 200){
+        Toast.show({
+          type:'success',
+          text1:'Update',
+          text2:"Update successfully",
+          visibilityTime:5000
+        })
+      }
       if (response.data.status !== 'success') {
         dispatch(updateUserFailur());
         return;
       }
       dispatch(updateUserSuccess(response.data.data.user));
-      console.log(response.data.data.user);
     } catch (error) {
       dispatch(updateUserFailur(error));
       console.error("Error fetching data: ", error);
@@ -124,7 +143,12 @@ const Profile = () => {
   };
 
   const SingOutfn =()=>{
-      
+    Toast.show({
+      type:'success',
+      text1:'Login again',
+      text2:"Signed Out successfully",
+      visibilityTime:5000
+    })
           dispatch(signOut());
           navigation.navigate('Login')
   }

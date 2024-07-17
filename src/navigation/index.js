@@ -4,6 +4,7 @@ import { Video, ResizeMode } from "expo-av";
 // import { useRouter } from "expo-router";
 import { useNavigation } from '@react-navigation/native';
 
+
 const Homebg = () => {
     const video = React.useRef(null);
     const [status, setStatus] = React.useState({});
@@ -23,6 +24,7 @@ const Homebg = () => {
         onPlaybackStatusUpdate={(status) => setStatus(() => status)}
       />
       <View style={styles.overlay}>
+      
         <Text style={styles.mainText}>Welcome</Text>
         <Text style={styles.subText}>To JobNest</Text>
         <Text style={styles.tagline}>Find a Job And Build Future</Text>
@@ -32,14 +34,14 @@ const Homebg = () => {
           style={styles.button}
           onPress={() => navigation.navigate('Login')}
         >
-          <Text style={styles.buttonText}>Login</Text>
+          <Text style={styles.buttonText}>GetStarted</Text>
         </TouchableOpacity>
-        <TouchableOpacity
+        {/* <TouchableOpacity
           style={styles.button}
           onPress={() => navigation.navigate('Signup')}
         >
           <Text style={styles.buttonText}>Register</Text>
-        </TouchableOpacity>
+        </TouchableOpacity> */}
       </View>
     </View>
   );
@@ -88,21 +90,21 @@ const styles = StyleSheet.create({
         justifyContent: "space-around",
         alignItems: "center",
         position: "absolute",
-        bottom: 30,
+        bottom: 70,
         top:'70%',
         left: 0,
         right: 0,
       },
       button: {
         backgroundColor: "#6200ea",
-        paddingVertical: 12,
+        paddingVertical: 15,
         paddingHorizontal: 20,
-        borderRadius: 25,
+        borderRadius: 50,
         elevation: 3, // Adds a shadow effect on Android
       },
       buttonText: {
         color: "white",
-        fontSize: 18,
+        fontSize: 21,
         fontWeight: "bold",
       },
 })

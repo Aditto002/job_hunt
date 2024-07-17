@@ -10,7 +10,11 @@ const JobDetails = ({ route }) => {
   const currentUser = useSelector(state => state.user.currentUser);
 
   const handleApply = () => {
-    Alert.alert('Apply', `You have applied for the job: ${job.jobTitle}`);
+    if (currentUser) {
+      navigation.navigate('ApplyJob', { job });
+    } else {
+      navigation.navigate('Login');
+    }
   };
 
   return (
@@ -23,7 +27,7 @@ const JobDetails = ({ route }) => {
       <View style={styles.container}>
         <Text style={styles.title}>{job.jobTitle}</Text>
         <View style={styles.detailsContainer}>
-          <Text style={styles.detail}><Text style={styles.detailTitle}>Job Type:</Text> {job.jobType}</Text>
+          <Text style={styles.detail}><Text style={styles.detailTitle}>Job Type:</Text> {job.jobType} Time</Text>
           <Text style={styles.detail}><Text style={styles.detailTitle}>Salary:</Text> {job.salary} Tk</Text>
           <Text style={styles.detail}><Text style={styles.detailTitle}>Location:</Text> {job.location}</Text>
           <Text style={styles.detail}><Text style={styles.detailTitle}>Company:</Text> {job.company}</Text>
@@ -34,7 +38,7 @@ const JobDetails = ({ route }) => {
 
         <TouchableOpacity
           style={styles.applyButton}
-          onPress={currentUser ? handleApply : () => navigation.navigate('Login')}
+          onPress={handleApply}
           activeOpacity={0.7}
         >
           <Text style={styles.applyButtonText}>Apply</Text>

@@ -61,7 +61,7 @@ const JobPost = () => {
             <Text style={styles.jobDetail}>JobType: {item.jobType} Time</Text>
             <Text style={styles.jobDetail}>Salary:{item.salary}</Text>
             <TouchableOpacity onPress={() => navigation.navigate('Jobdetails', { job: item })}>
-              <Text style={styles.learnMore}>Learn more</Text>
+              <Text style={styles.learnMore}>View Details</Text>
             </TouchableOpacity>
           </View>
         )}
