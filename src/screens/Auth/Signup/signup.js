@@ -73,7 +73,7 @@ const Signup = () => {
         return Alert.alert("invalid Admin");
       }
 
-      const response = await axios.post("http://192.168.1.228:3000/api/auth/singup", formData);
+      const response = await axios.post("http://192.168.0.105:3000/api/auth/singup", formData);
       console.log(response.data.data);
       dispatch(signInSuccess(response.data.data))
       if(response.data.data.userType == "Admin"){

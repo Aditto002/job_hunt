@@ -65,7 +65,7 @@ const AdminScreen = () => {
           <Card.Content>
             <Title>Analytics Overview</Title>
             <Paragraph>Monitor job posts and applications with detailed analytics.</Paragraph>
-            <Button mode="contained" onPress={() => {}}>
+            <Button mode="contained" onPress={() => {navigation.navigate('AdminPostAnalyse')}}>
               View Analytics
             </Button>
           </Card.Content>

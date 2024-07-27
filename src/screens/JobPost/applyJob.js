@@ -37,42 +37,109 @@ const ApplyJob = ({ route }) => {
           value={fullName}
           onChangeText={setFullName}
           style={styles.input}
+          underlineColor="transparent"
+              mode="outlined" 
+              theme={{
+                colors: {
+                  primary: '#6c7173', 
+                  background: '#f0f0f0', 
+                  text: 'black' 
+                }
+              }}
         />
         <TextInput
           label="Email Address"
           value={email}
           onChangeText={setEmail}
           style={styles.input}
+          underlineColor="transparent"
+              mode="outlined" 
+              theme={{
+                colors: {
+                  primary: '#4d575b', 
+                  background: '#f0f0f0', 
+                  text: 'black' 
+                }
+              }}
         />
         <TextInput
           label="Phone Number"
           value={phone}
           onChangeText={setPhone}
           style={styles.input}
+          underlineColor="transparent"
+              mode="outlined" 
+              theme={{
+                colors: {
+                  primary: '#4d575b', 
+                  background: '#f0f0f0', 
+                  text: 'black' 
+                }
+              }}
         />
         <TextInput
           label="Address"
           value={address}
           onChangeText={setAddress}
           style={styles.input}
+          underlineColor="transparent"
+              mode="outlined" 
+              theme={{
+                colors: {
+                  primary: '#4d575b', 
+                  background: '#f0f0f0', 
+                  text: 'black' 
+                }
+              }}
         />
         <TextInput
           label="Education Background"
           value={education}
           onChangeText={setEducation}
           style={styles.input}
+          multiline
+          numberOfLines={4}
+          underlineColor="transparent"
+              mode="outlined" 
+              theme={{
+                colors: {
+                  primary: '#4d575b', 
+                  background: '#f0f0f0', 
+                  text: 'black' 
+                }
+              }}
         />
         <TextInput
           label="Work Experience"
           value={experience}
           onChangeText={setExperience}
           style={styles.input}
+          underlineColor="transparent"
+              mode="outlined" 
+              theme={{
+                colors: {
+                  primary: '#4d575b', 
+                  background: '#f0f0f0', 
+                  text: 'black' 
+                }
+              }}
         />
         <TextInput
           label="Skills and Qualifications"
           value={skills}
           onChangeText={setSkills}
           style={styles.input}
+          multiline
+          numberOfLines={4}
+          underlineColor="transparent"
+              mode="outlined" 
+              theme={{
+                colors: {
+                  primary: '#4d575b', 
+                  background: '#f0f0f0', 
+                  text: 'black' 
+                }
+              }}
         />
         <Button mode="contained" onPress={handleSubmit} style={styles.submitButton}>
           Submit

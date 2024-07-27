@@ -22,9 +22,9 @@ const PostJob = ({ navigation }) => {
       const formData = { jobTitle:title, company:company,location:location , jobType:jobType, salary:salary,experience:experience,qualifications:qualifications,description:description};
 
 
-      const response = await axios.post("http://192.168.1.228:3000/api/job/addjobs", formData);
+      const response = await axios.post("http://192.168.0.105:3000/api/job/addjobs", formData);
       
-      console.log('Status:', response.data.status); 
+      console.log('Status:', response); 
       if(response.data.status == 'success'){
         Toast.show({
           type:'success',
@@ -56,18 +56,45 @@ const PostJob = ({ navigation }) => {
               value={title}
               onChangeText={setTitle}
               style={styles.input}
+              underlineColor="transparent"
+              mode="outlined" 
+              theme={{
+                colors: {
+                  primary: '#4d575b', 
+                  background: '#f0f0f0', 
+                  text: 'black' 
+                }
+              }}
             />
             <TextInput
               label="Company"
               value={company}
               onChangeText={setCompany}
               style={styles.input}
+              underlineColor="transparent"
+              mode="outlined" 
+              theme={{
+                colors: {
+                  primary: '#4d575b', 
+                  background: '#f0f0f0', 
+                  text: 'black' 
+                }
+              }}
             />
             <TextInput
               label="Location"
               value={location}
               onChangeText={setLocation}
               style={styles.input}
+              underlineColor="transparent"
+              mode="outlined" 
+              theme={{
+                colors: {
+                  primary: '#4d575b', 
+                  background: '#f0f0f0', 
+                  text: 'black' 
+                }
+              }}
             />
             <List.Section title="Job Type">
               <View style={styles.radioButtonContainer}>
@@ -95,18 +122,45 @@ const PostJob = ({ navigation }) => {
               onChangeText={setSalary}
               style={styles.input}
               keyboardType="numeric"
+              underlineColor="transparent"
+              mode="outlined" 
+              theme={{
+                colors: {
+                  primary: '#4d575b', 
+                  background: '#f0f0f0', 
+                  text: 'black' 
+                }
+              }}
             />
             <TextInput
               label="Experience"
               value={experience}
               onChangeText={setExperience}
               style={styles.input}
+              underlineColor="transparent"
+              mode="outlined" 
+              theme={{
+                colors: {
+                  primary: '#4d575b', 
+                  background: '#f0f0f0', 
+                  text: 'black' 
+                }
+              }}
             />
             <TextInput
               label="Qualifications"
               value={qualifications}
               onChangeText={setQualifications}
               style={styles.input}
+              underlineColor="transparent"
+              mode="outlined" 
+              theme={{
+                colors: {
+                  primary: '#4d575b', 
+                  background: '#f0f0f0', 
+                  text: 'black' 
+                }
+              }}
             />
             <TextInput
               label="Job Description"
@@ -115,6 +169,15 @@ const PostJob = ({ navigation }) => {
               multiline
               numberOfLines={4}
               style={styles.input}
+              underlineColor="transparent"
+              mode="outlined" 
+              theme={{
+                colors: {
+                  primary: '#4d575b', 
+                  background: '#f0f0f0', 
+                  text: 'black' 
+                }
+              }}
             />
             <Button mode="contained" onPress={handlePostJob} style={styles.button}>
               Post Job
@@ -138,7 +201,12 @@ const styles = StyleSheet.create({
     backgroundColor: '#ffffff',
   },
   input: {
+    paddingRight: 40,
+    backgroundColor: '#f0f0f0',
     marginBottom: 16,
+    borderColor:'black',
+    borderRadius: 10
+
 
   },
   radioButtonContainer: {

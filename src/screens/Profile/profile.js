@@ -11,6 +11,7 @@ import { updateUserStart, updateUserSuccess, updateUserFailur,signOut } from '..
 import axios from 'axios';
 import { useNavigation } from '@react-navigation/native';
 import Toast from 'react-native-toast-message';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
 const Profile = () => {
@@ -120,8 +121,25 @@ const Profile = () => {
         })
         return;
       }
-
-      const response = await axios.post(`http://192.168.1.228:3000/api/user/update/${currentUser._id}`, formData);
+      // token
+      // const accessToken = await AsyncStorage.getItem("token");
+      // console.log(accessToken);
+      // if (!accessToken) {
+      //   Toast.show({
+      //     type: 'error',
+      //     text1: 'No Token',
+      //     text2: "No token found, please log in again",
+      //     visibilityTime: 5000
+      //   });
+      //   return;
+      // }
+      const response = await axios.post(`http://192.168.0.105:3000/api/user/update/${currentUser._id}`, formData);
+      // {
+      //   headers: {
+      //     'Content-Type': 'application/json',
+      //     'Authorization': `Bearer ${accessToken}` // Ensure proper formatting
+      //   }}
+      
       console.log(response.status);
       if(response.status == 200){
         Toast.show({
@@ -149,6 +167,7 @@ const Profile = () => {
       text2:"Signed Out successfully",
       visibilityTime:5000
     })
+         AsyncStorage.removeItem("token");
           dispatch(signOut());
           navigation.navigate('Login')
   }

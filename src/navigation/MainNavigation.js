@@ -14,6 +14,7 @@ import AdminScreen from '../screens/AdminScreens/AdminScreen.js';
 import PostJob from '../screens/AdminScreens/addPost.js';
 import Jobdetails from '../screens/JobPost/jobdetails.js';
 import ApplyJob from '../screens/JobPost/applyJob.js';
+import AdminPostAnalyse from '../screens/AdminScreens/adminPostanalyse.js';
 // import { createDrawerNavigator } from '@react-navigation/drawer';
 // import Toast from 'react-native-toast-message';
 
@@ -98,27 +99,19 @@ const StackNav = ()=>{
       component={AdminScreen}
       options={{ headerBackVisible: false }}
       />
+      <Stack.Screen
+      name="AdminPostAnalyse"
+      component={AdminPostAnalyse}
+      options={{ headerBackVisible: false }}
+      />
     </Stack.Navigator>
-    {routeName !== 'Homebg' && routeName !== 'Login' && routeName !== 'Signup' && <BottomBar />}
+    {routeName !== 'Homebg'  && <BottomBar />}
+    {/* {routeName !== 'Homebg' && routeName !== 'Login' && routeName !== 'Signup' && <BottomBar />} */}
     </>
     
   );
   
 };
-// const MyComponent = () => {
-
-//   // const [active, setActive] = React.useState('');
-//   const Drawer = createDrawerNavigator();
-
-//   return (
-   
-//        <Drawer.Navigator initialRouteName="Profile">
-//         <Drawer.Screen name="Profile" component={StackNav} />
-        
-//       </Drawer.Navigator>
-    
-//   );
-// };
 
 const MainNavigation = () => {
   

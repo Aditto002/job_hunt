@@ -13,7 +13,7 @@ const JobPost = () => {
   useEffect(() => {
     const fetchJobs = async () => {
       try {
-        const response = await axios.get('http://192.168.1.228:3000/api/job/jobs');
+        const response = await axios.get('http://192.168.0.105:3000/api/job/jobs');
         setJobList(response.data);
       } catch (error) {
         console.error('Error fetching jobs:', error);
@@ -78,7 +78,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#f0f4f8',
   },
   header: {
-    height: 80, 
+    height: 60, 
     backgroundColor: '#D6E3E8',
     justifyContent: 'center',
     alignItems: 'center',
@@ -91,7 +91,7 @@ const styles = StyleSheet.create({
   },
   headerTitle: {
     color: '#0C090A',
-    marginBottom: -25,
+    // marginBottom: -25,
     fontSize: 24,
     fontWeight: 'bold',
   },

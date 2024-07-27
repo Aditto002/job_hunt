@@ -7,6 +7,7 @@ import { signInStart,signInSuccess,signInFailure } from '../../../redux/user/use
 import { useDispatch, useSelector } from 'react-redux';
 import Feather from '@expo/vector-icons/Feather';
 import Toast from 'react-native-toast-message';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
 
@@ -33,13 +34,14 @@ const Login = () => {
     try {
       dispatch(signInStart());
       const formData = { email, password };
-      const response = await axios.post("http://192.168.1.228:3000/api/auth/singin", formData);
+      const response = await axios.post("http://192.168.0.105:3000/api/auth/singin", formData);
       if (response.data.status !== 'success') {
         dispatch(signInFailure());
         return;
       }
       dispatch(signInSuccess(response.data.data.user));
-      console.log(response.data.userType)
+      console.log(response.data.data.token)
+      AsyncStorage.setItem("token",response.data.data.token);
       if(response.data.userType == "Admin"){
 
         Toast.show({
