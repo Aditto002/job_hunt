@@ -1,6 +1,6 @@
 import React, { useState, useRef } from 'react';
 import { Avatar, Text, TextInput, Button } from 'react-native-paper';
-import { Alert, StyleSheet, View, TouchableOpacity } from 'react-native';
+import { Alert, StyleSheet, View, TouchableOpacity, BackHandler } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
 import * as ImagePicker from 'expo-image-picker';
 import * as FileSystem from 'expo-file-system';
@@ -9,7 +9,7 @@ import 'firebase/compat/storage';
 import Feather from '@expo/vector-icons/Feather';
 import { updateUserStart, updateUserSuccess, updateUserFailur,signOut } from '../../redux/user/userSlice.js';
 import axios from 'axios';
-import { useNavigation } from '@react-navigation/native';
+import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import Toast from 'react-native-toast-message';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
@@ -25,6 +25,34 @@ const Profile = () => {
   const [passwords, setPasswords] = useState(currentUser.password);
   const [profilePicture, setProfilePicture] = useState(currentUser.profilePicture);
   const navigation = useNavigation();
+//////////////////////////////////////////////////////////////////////////////
+  const handelBackpress =()=>{
+    Alert.alert(
+      'Exit App',
+      'Are you sure you want to exit ?',
+      [{
+        text:'Cancel',
+        onPress:()=> null,
+        style: 'cancel'
+      },{
+        text:'Exit',
+        onPress:()=> BackHandler.exitApp(),
+      }]
+
+    );
+    return true;
+  }
+  useFocusEffect(
+    React.useCallback(()=>{
+      BackHandler.addEventListener('hardwareBackPress',handelBackpress)
+      return ()=>{
+        BackHandler.removeEventListener('hardwareBackPress',handelBackpress)
+      }
+    })
+  )
+
+
+
   const handleName = (e) => {
     const namevar = e.nativeEvent.text;
     setName(namevar);
@@ -140,7 +168,7 @@ const Profile = () => {
       //     'Authorization': `Bearer ${accessToken}` // Ensure proper formatting
       //   }}
       
-      console.log(response.status);
+      console.log(response.data.data);
       if(response.status == 200){
         Toast.show({
           type:'success',
@@ -149,11 +177,7 @@ const Profile = () => {
           visibilityTime:5000
         })
       }
-      if (response.data.status !== 'success') {
-        dispatch(updateUserFailur());
-        return;
-      }
-      dispatch(updateUserSuccess(response.data.data.user));
+      dispatch(updateUserSuccess(response.data.data));
     } catch (error) {
       dispatch(updateUserFailur(error));
       console.error("Error fetching data: ", error);

@@ -1,7 +1,7 @@
-import React from 'react';
-import { View, StyleSheet, ScrollView } from 'react-native';
+import React, { useEffect } from 'react';
+import { View, StyleSheet, ScrollView,BackHandler, Alert } from 'react-native';
 import { Appbar, Avatar, Card, Title, Paragraph, Button, DataTable, Divider, List } from 'react-native-paper';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation,useFocusEffect } from '@react-navigation/native';
 import Feather from '@expo/vector-icons/Feather';
 
 const AdminScreen = () => {
@@ -12,6 +12,39 @@ const AdminScreen = () => {
   const navigatJobPost =()=>{
     navigation.navigate('PostJob')
   }
+
+  const handelBackpress =()=>{
+    Alert.alert(
+      'Exit App',
+      'Are you sure you want to exit ?',
+      [{
+        text:'Cancel',
+        onPress:()=> null,
+        style: 'cancel'
+      },{
+        text:'Exit',
+        onPress:()=> BackHandler.exitApp(),
+      }]
+
+    );
+    return true;
+  }
+  useFocusEffect(
+    React.useCallback(()=>{
+      BackHandler.addEventListener('hardwareBackPress',handelBackpress)
+      return ()=>{
+        BackHandler.removeEventListener('hardwareBackPress',handelBackpress)
+      }
+    })
+  )
+   
+  // useEffect(()=>{
+   
+  // },[])
+
+
+
+
   return (
     <View style={styles.container}>
       <Appbar.Header>

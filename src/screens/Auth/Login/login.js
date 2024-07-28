@@ -40,7 +40,7 @@ const Login = () => {
         return;
       }
       dispatch(signInSuccess(response.data.data.user));
-      console.log(response.data.data.token)
+      console.log(response.data.data.user)
       AsyncStorage.setItem("token",response.data.data.token);
       if(response.data.userType == "Admin"){
 
