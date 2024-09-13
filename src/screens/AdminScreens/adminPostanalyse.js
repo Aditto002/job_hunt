@@ -5,12 +5,14 @@ import { useSelector } from 'react-redux';
 
 const AdminPostAnalyse = () => {
   const [jobs, setJobs] = useState([]);
+  
   const { currentUser } = useSelector(state => state.user);// Assuming you store the user information in the Redux store
 
   useEffect(() => {
+    
     const fetchJobs = async () => {
       try {
-        const response = await axios.get(`http://192.168.0.105:3000/api/jobs?admin=${currentUser._id}`);
+        const response = await axios.get(`http://192.168.1.228:3000/api/jobs?admin=${currentUser._id}`);
         setJobs(response.data);
       } catch (error) {
         console.error("Error fetching jobs: ", error);

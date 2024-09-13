@@ -161,7 +161,7 @@ const Profile = () => {
       //   });
       //   return;
       // }
-      const response = await axios.post(`http://192.168.0.105:3000/api/user/update/${currentUser._id}`, formData);
+      const response = await axios.post(`http://192.168.1.228:3000/api/user/update/${currentUser._id}`, formData);
       // {
       //   headers: {
       //     'Content-Type': 'application/json',
@@ -192,6 +192,7 @@ const Profile = () => {
       visibilityTime:5000
     })
          AsyncStorage.removeItem("token");
+        //  AsyncStorage.removeItem("isLoggedIn");
           dispatch(signOut());
           navigation.navigate('Login')
   }

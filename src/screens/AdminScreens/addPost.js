@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import { View, StyleSheet, ScrollView, Alert } from 'react-native';
 import { TextInput, Button, Card, Title, Paragraph, RadioButton, List, Appbar } from 'react-native-paper';
 import Toast from 'react-native-toast-message';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const PostJob = ({ navigation }) => {
   const [title, setTitle] = useState('');
@@ -13,6 +14,7 @@ const PostJob = ({ navigation }) => {
   const [experience, setExperience] = useState('');
   const [qualifications, setQualifications] = useState('');
   const [description, setDescription] = useState('');
+  
 
   const handlePostJob = async() => {
 
@@ -21,8 +23,19 @@ const PostJob = ({ navigation }) => {
 
       const formData = { jobTitle:title, company:company,location:location , jobType:jobType, salary:salary,experience:experience,qualifications:qualifications,description:description};
 
-
-      const response = await axios.post("http://192.168.0.105:3000/api/job/addjobs", formData);
+      console.log("form data",formData)
+      const token =await AsyncStorage.getItem('token');
+      console.log("get token ",token)
+      const response = await axios.post(
+        'http://192.168.1.228:3000/api/job/addjobs',
+        formData,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`, 
+            // 'Content-Type': 'multipart/form-data', 
+          },
+        }
+      );
       
       console.log('Status:', response); 
       if(response.data.status == 'success'){

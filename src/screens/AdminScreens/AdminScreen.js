@@ -1,68 +1,108 @@
-import React, { useEffect } from 'react';
-import { View, StyleSheet, ScrollView,BackHandler, Alert } from 'react-native';
-import { Appbar, Avatar, Card, Title, Paragraph, Button, DataTable, Divider, List } from 'react-native-paper';
-import { useNavigation,useFocusEffect } from '@react-navigation/native';
+import React, { useEffect, useState } from 'react';
+import { View, StyleSheet, ScrollView, BackHandler, Alert } from 'react-native';
+import { Appbar, Card, Title, Paragraph, Button, DataTable, Divider, List } from 'react-native-paper';
+import { useNavigation, useFocusEffect } from '@react-navigation/native';
 import Feather from '@expo/vector-icons/Feather';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import axios from 'axios';
+import { RefreshControl } from 'react-native-gesture-handler';
 
 const AdminScreen = () => {
   const navigation = useNavigation();
-  const navigatProfile =()=>{
-    navigation.navigate('Profile')
-  }
-  const navigatJobPost =()=>{
-    navigation.navigate('PostJob')
-  }
+  const [adminpostcount, setAdminpostCount] = useState(0);
+  const [refreshing, setRefreshing] = useState(false);
 
-  const handelBackpress =()=>{
+  const navigateProfile = () => {
+    navigation.navigate('Profile');
+  };
+
+  const navigateJobPost = () => {
+    navigation.navigate('PostJob');
+  };
+  const navigateAdminJobPost = () => {
+    navigation.navigate('AdminJoblist');
+  };
+
+  const handleBackPress = () => {
     Alert.alert(
       'Exit App',
-      'Are you sure you want to exit ?',
-      [{
-        text:'Cancel',
-        onPress:()=> null,
-        style: 'cancel'
-      },{
-        text:'Exit',
-        onPress:()=> BackHandler.exitApp(),
-      }]
-
+      'Are you sure you want to exit?',
+      [
+        {
+          text: 'Cancel',
+          onPress: () => null,
+          style: 'cancel',
+        },
+        {
+          text: 'Exit',
+          onPress: () => BackHandler.exitApp(),
+        },
+      ]
     );
     return true;
-  }
-  useFocusEffect(
-    React.useCallback(()=>{
-      BackHandler.addEventListener('hardwareBackPress',handelBackpress)
-      return ()=>{
-        BackHandler.removeEventListener('hardwareBackPress',handelBackpress)
+  };
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const token = await AsyncStorage.getItem('token');
+        console.log('Admin token:', token);
+
+        if (token) {
+          const response = await axios.get('http://192.168.1.228:3000/api/job/admintotalpost', {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          });
+
+          console.log('Response data:', response.data);
+          const { totalPost } = response.data;
+          setAdminpostCount(totalPost);
+        } else {
+          console.error('Token is not available');
+        }
+      } catch (error) {
+        console.error('Error fetching job counts:', error);
       }
-    })
-  )
-   
-  // useEffect(()=>{
-   
-  // },[])
+    };
 
+    fetchData();
+  }, []); // No need to update any value here
+  const onRefresh = () => {
+    setRefreshing(true);
+    fetchData();
+  };
 
-
+  useFocusEffect(
+    React.useCallback(() => {
+      BackHandler.addEventListener('hardwareBackPress', handleBackPress);
+      return () => {
+        BackHandler.removeEventListener('hardwareBackPress', handleBackPress);
+      };
+    }, [])
+  );
 
   return (
     <View style={styles.container}>
       <Appbar.Header>
         <Appbar.Action icon="menu" onPress={() => {}} />
         <Appbar.Content title="Admin Dashboard" />
-        {/* <Appbar.Action icon="profile" onPress={() => {navigatProfile()}} /> */}
-        <Feather name={'user'} style={styles.ficon}  onPress={() => {navigatProfile()}}/>
+        <Feather name="user" style={styles.ficon} onPress={navigateProfile} />
       </Appbar.Header>
 
-      <ScrollView contentContainerStyle={styles.content}>
+      <ScrollView contentContainerStyle={styles.content}
+      //  refreshControl={
+      //   <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+      // }
+      >
         <Card style={styles.card}>
           <Card.Content>
             <Title>Total Job Posts</Title>
-            <Paragraph style={styles.paragraph}>00</Paragraph>
+            <Paragraph style={styles.paragraph}>{adminpostcount}</Paragraph>
           </Card.Content>
         </Card>
 
-        <Button icon="plus" mode="contained" onPress={() => {navigatJobPost()}} style={styles.button}>
+        <Button icon="plus" mode="contained" onPress={navigateJobPost} style={styles.button}>
           Add Job
         </Button>
 
@@ -70,27 +110,17 @@ const AdminScreen = () => {
           <Card.Content>
             <Title>Approve Job Applications</Title>
             <Divider style={styles.divider} />
-            <DataTable>
+            <Button mode="contained" onPress={() => navigation.navigate('AdminJoblist')}>
+              See post
+            </Button>
+            {/* <DataTable>
               <DataTable.Header>
                 <DataTable.Title>Applicant</DataTable.Title>
                 <DataTable.Title>Status</DataTable.Title>
                 <DataTable.Title>Action</DataTable.Title>
               </DataTable.Header>
-
-              {/* <DataTable.Row>
-                <DataTable.Cell>Joh</DataTable.Cell>
-                <DataTable.Cell>Pending</DataTable.Cell>
-                <DataTable.Cell>
-                  <View style={styles.actionButtons}>
-                    <Button mode="contained" onPress={() => {}} style={styles.approveButton}>
-                      Approve
-                    </Button>
-                  
-                  </View>
-                </DataTable.Cell>
-              </DataTable.Row> */}
-              {/* Add more rows as needed */}
-            </DataTable>
+              
+            </DataTable> */}
           </Card.Content>
         </Card>
 
@@ -98,7 +128,7 @@ const AdminScreen = () => {
           <Card.Content>
             <Title>Analytics Overview</Title>
             <Paragraph>Monitor job posts and applications with detailed analytics.</Paragraph>
-            <Button mode="contained" onPress={() => {navigation.navigate('AdminPostAnalyse')}}>
+            <Button mode="contained" onPress={() => navigation.navigate('AdminPostAnalyse')}>
               View Analytics
             </Button>
           </Card.Content>
@@ -124,7 +154,6 @@ const AdminScreen = () => {
                 description="1 hour ago"
                 left={props => <List.Icon {...props} icon="close" />}
               />
-              {/* Add more items as needed */}
             </List.Section>
           </Card.Content>
         </Card>
@@ -137,12 +166,9 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
-  profileIcon: {
-    marginRight: 10,
-  },
   content: {
     padding: 20,
-    paddingBottom: 100, // To provide space for the FAB
+    paddingBottom: 100,
   },
   card: {
     marginBottom: 20,
@@ -152,6 +178,8 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.3,
     shadowRadius: 2,
+   
+
     elevation: 3,
   },
   paragraph: {

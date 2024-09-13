@@ -11,6 +11,8 @@ import { signInStart,signInSuccess,signInFailure } from '../../../redux/user/use
 import { useDispatch, useSelector } from 'react-redux';
 import { RadioButton } from 'react-native-paper';
 import Toast from 'react-native-toast-message';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
 
 const Signup = () => {
   const [errormsg, setErrormsg] = useState(null);
@@ -73,9 +75,11 @@ const Signup = () => {
         return Alert.alert("invalid Admin");
       }
 
-      const response = await axios.post("http://192.168.0.105:3000/api/auth/singup", formData);
-      console.log(response.data.data);
+      const response = await axios.post("http://192.168.1.228:3000/api/auth/singup", formData);
+      // console.log(response.data.data);
       dispatch(signInSuccess(response.data.data))
+      // console.log("token response",response?.data?.token)
+      await AsyncStorage.setItem('token', response?.data?.token);
       if(response.data.data.userType == "Admin"){
         Toast.show({
           type:'success',

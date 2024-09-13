@@ -34,14 +34,16 @@ const Login = () => {
     try {
       dispatch(signInStart());
       const formData = { email, password };
-      const response = await axios.post("http://192.168.0.105:3000/api/auth/singin", formData);
+      const response = await axios.post("http://192.168.1.228:3000/api/auth/singin", formData);
       if (response.data.status !== 'success') {
         dispatch(signInFailure());
         return;
       }
       dispatch(signInSuccess(response.data.data.user));
-      console.log(response.data.data.user)
-      AsyncStorage.setItem("token",response.data.data.token);
+      console.log('login token is ,,, ',response.data.token)
+      // console.log('login token is ,,, ',response)
+      AsyncStorage.setItem("token",response?.data?.token);
+      // AsyncStorage.setItem("isLoggedIn",JSON.stringify(true));
       if(response.data.userType == "Admin"){
 
         Toast.show({

@@ -1,21 +1,24 @@
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, View, SafeAreaView, FlatList, TouchableOpacity } from 'react-native';
-import { Appbar, Text, Searchbar, Button, shadow } from 'react-native-paper';
+import { StyleSheet, View, SafeAreaView, FlatList, TouchableOpacity, Text } from 'react-native';
+import { Appbar, Searchbar } from 'react-native-paper';
 import axios from 'axios';
-import { NavigationContainer, useNavigation } from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
 
 const Home = () => {
   const navigation = useNavigation();
   const [jobs, setJobs] = useState([]);
   const [jobCounts, setJobCounts] = useState({ totalJobs: 0, partTimeJobs: 0, fullTimeJobs: 0 });
   const [searchQuery, setSearchQuery] = useState('');
-
-  const onChangeSearch = query => setSearchQuery(query);
+  const [filteredJobs, setFilteredJobs] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
 
   const fetchJobs = async () => {
     try {
-      const response = await axios.get('http://192.168.0.105:3000/api/job/jobs');
+      setIsLoading(true);
+      const response = await axios.get('http://192.168.1.228:3000/api/job/jobs');
       setJobs(response.data);
+      setFilteredJobs(response.data);
+      setIsLoading(false);
     } catch (error) {
       console.error('Error fetching jobs:', error);
     }
@@ -23,7 +26,7 @@ const Home = () => {
 
   const fetchJobCounts = async () => {
     try {
-      const response = await axios.get('http://192.168.0.105:3000/api/job/job-counts');
+      const response = await axios.get('http://192.168.1.228:3000/api/job/job-counts');
       setJobCounts(response.data);
     } catch (error) {
       console.error('Error fetching job counts:', error);
@@ -31,27 +34,34 @@ const Home = () => {
   };
 
   useEffect(() => {
-    
     fetchJobs();
     fetchJobCounts();
   }, []);
 
+  useEffect(() => {
+    const lowercasedFilter = searchQuery.toLowerCase();
+    const filteredData = jobs.filter(item => {
+      return (item.jobTitle.toLowerCase().includes(lowercasedFilter)||item.location.toLowerCase().includes(lowercasedFilter));
+    });
+    setFilteredJobs(filteredData);
+  }, [searchQuery, jobs]);
+
   const renderJobItem = ({ item }) => (
     <View style={styles.jobItem}>
-    <View style={styles.jobInfo}>
-      <Text style={styles.jobTitle}>{item.jobTitle}</Text>
-      <Text style={styles.jobDetails}>JobType: {item.jobType} Time</Text>
-      <Text style={styles.jobDetails}>Salary: {item.salary} Tk</Text>
-    </View>
-    <View style={styles.jobLinkContainer}>
-      <View style={styles.buttonContainer}>
-        <View style={styles.innerShadow} />
-        <TouchableOpacity style={styles.bnt} onPress={() => navigation.navigate('Jobdetails', { job: item })}>
-          <Text style={styles.jobLink}>View Details</Text>
-        </TouchableOpacity>
+      <View style={styles.jobInfo}>
+        <Text style={styles.jobTitle}>{item.jobTitle}</Text>
+        <Text style={styles.jobDetails}>JobType: {item.jobType.charAt(0).toUpperCase() + item.jobType.slice(1)} Time</Text>
+        <Text style={styles.jobDetails}>Salary: {item.salary} Tk</Text>
+      </View>
+      <View style={styles.jobLinkContainer}>
+        <View style={styles.buttonContainer}>
+          <View style={styles.innerShadow} />
+          <TouchableOpacity style={styles.bnt} onPress={() => navigation.navigate('Jobdetails', { job: item })}>
+            <Text style={styles.jobLink}>View Details</Text>
+          </TouchableOpacity>
+        </View>
       </View>
     </View>
-  </View>
   );
 
   return (
@@ -78,13 +88,16 @@ const Home = () => {
 
       <Searchbar
         placeholder="Search"
-        onChangeText={onChangeSearch}
+        onChangeText={setSearchQuery}
         value={searchQuery}
+        clearButtonMode='always'
+        autoCapitalize='none'
+        autoCorrect={false}
         style={styles.searchbar}
       />
-      
+
       <FlatList
-        data={jobs}
+        data={filteredJobs}
         renderItem={renderJobItem}
         keyExtractor={item => item._id}
         style={styles.jobList}
@@ -107,7 +120,6 @@ const styles = StyleSheet.create({
     marginVertical: 10,
   },
   homeheader: {
-    // marginTop: -50,
     height: 60, 
     backgroundColor: '#D6E3E8',
     justifyContent: 'center',
@@ -193,7 +205,6 @@ const styles = StyleSheet.create({
   },
   jobLink: {
     color: '#007bff',
-    fontWeight:600,
-    // marginTop: 5,
+    fontWeight: '600',
   },
 });

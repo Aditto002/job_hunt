@@ -24,6 +24,7 @@
     "expo-image-picker": "~15.0.7",
     "expo-status-bar": "~1.12.1",
     "firebase": "^10.12.2",
+    "lodash.filter": "^4.6.0",
     "react": "^18.2.0",
     "react-native": "0.74.1",
     "react-native-document-picker": "^9.3.0",
