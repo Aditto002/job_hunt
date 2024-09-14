@@ -4,6 +4,7 @@ import { View, StyleSheet, ScrollView, Alert } from 'react-native';
 import { TextInput, Button, Card, Title, Paragraph, RadioButton, List, Appbar } from 'react-native-paper';
 import Toast from 'react-native-toast-message';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+// import { useNavigation } from '@react-navigation/native';
 
 const PostJob = ({ navigation }) => {
   const [title, setTitle] = useState('');
@@ -14,6 +15,7 @@ const PostJob = ({ navigation }) => {
   const [experience, setExperience] = useState('');
   const [qualifications, setQualifications] = useState('');
   const [description, setDescription] = useState('');
+  // const navigation = useNavigation();
   
 
   const handlePostJob = async() => {
@@ -46,6 +48,7 @@ const PostJob = ({ navigation }) => {
           visibilityTime:5000
         })
       }
+      navigation.navigate('AdminJoblist');
 
     } catch (error) {
       console.error("Error fetching data: ", error);

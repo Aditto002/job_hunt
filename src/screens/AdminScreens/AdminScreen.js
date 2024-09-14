@@ -68,10 +68,10 @@ const AdminScreen = () => {
 
     fetchData();
   }, []); // No need to update any value here
-  const onRefresh = () => {
-    setRefreshing(true);
-    fetchData();
-  };
+  // const onRefresh = () => {
+  //   setRefreshing(true);
+  //   fetchData();
+  // };
 
   useFocusEffect(
     React.useCallback(() => {
@@ -205,19 +205,7 @@ const styles = StyleSheet.create({
     fontSize:25,
     marginRight:15,
   }
-  // rejectButton: {
-  //   marginLeft: 8,
-  //   borderColor: '#F44336', // Red color for reject
-  //   color: '#F44336',
-  // },
+
 });
 
 export default AdminScreen;
-// Job Title
-// Company
-// Location
-// job type (part-time or full-time)
-// Salary 
-// experience 
-// Qualifications
-// descripsion

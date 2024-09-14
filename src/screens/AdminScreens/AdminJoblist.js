@@ -1,13 +1,16 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, FlatList, ActivityIndicator, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Text, FlatList, ActivityIndicator, StyleSheet, TouchableOpacity, Alert } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
-import { FontAwesome } from '@expo/vector-icons'; // Make sure this is installed
+import { FontAwesome } from '@expo/vector-icons'; 
+import Toast from 'react-native-toast-message';
+import { useNavigation, useFocusEffect } from '@react-navigation/native';
 
 const AdminPosts = () => {
   const [adminPostData, setAdminPostData] = useState({ totalPost: 0, posts: [] });
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const navigation = useNavigation();
 
   const fetchAdminPostCounts = async () => {
     try {
@@ -30,18 +33,44 @@ const AdminPosts = () => {
     }
   };
 
-  useEffect(() => {
-    fetchAdminPostCounts();
-  }, []);
+  // Refetch data when the screen is focused
+  useFocusEffect(
+    React.useCallback(() => {
+      fetchAdminPostCounts();
+    }, [])
+  );
 
   const handleEdit = (postId) => {
-    // Placeholder for edit functionality
-    console.log('Edit post:', postId);
+    // Navigate to the UpdateJobPost screen
+    navigation.navigate('UpdatJobPost', { postId });
   };
 
-  const handleDelete = (postId) => {
-    // Placeholder for delete functionality
-    console.log("Delete post:", postId);
+  const handleDelete = async (postId) => {
+    try {
+      const token = await AsyncStorage.getItem('token');
+      if (token) {
+        const response = await axios.delete(`http://192.168.1.228:3000/api/job/admindeletepost/${postId}`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        Toast.show({
+          type: 'success',
+          text1: 'Success',
+          text2: 'Post deleted successfully',
+          visibilityTime: 5000
+        });
+
+        // Refetch the admin post data after deletion
+        fetchAdminPostCounts();
+      } else {
+        Alert.alert("Error", "Token is not available");
+      }
+    } catch (error) {
+      console.error('Error deleting post:', error);
+      Alert.alert("Error", "Error deleting post");
+    }
   };
 
   if (loading) {
@@ -75,7 +104,6 @@ const AdminPosts = () => {
             <Text style={styles.detail}><Text style={styles.label}>Salary:</Text> {item.salary}</Text>
             <Text style={styles.detail}><Text style={styles.label}>Experience:</Text> {item.experience}</Text>
             <Text style={styles.detail}><Text style={styles.label}>Qualifications:</Text> {item.qualifications}</Text>
-            <Text style={styles.detail}><Text style={styles.label}>Description:</Text> {item.description}</Text>
 
             <View style={styles.actionButtons}>
               <TouchableOpacity
