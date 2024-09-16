@@ -244,6 +244,9 @@ const Profile = () => {
         <Button mode="contained" style={styles.button} onPress={SingOutfn}>
           Sing Out
         </Button>
+        <Button mode="contained" style={styles.button} onPress={()=>navigation.navigate('AppliedJobsList')}>
+          Applied Job List
+        </Button>
       </View>
     </>
   );

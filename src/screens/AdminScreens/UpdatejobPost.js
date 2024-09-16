@@ -78,9 +78,6 @@ const UpdateJobPostScreen = ({ route, navigation }) => {
       keyboardVerticalOffset={100} // Adjust if necessary for header space
     >
       <View style={styles.header}>
-        <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
-          <Ionicons name="arrow-back" size={24} color="white" />
-        </TouchableOpacity>
         <Text style={styles.headerTitle}>Update Job Post</Text>
       </View>
 
@@ -153,20 +150,15 @@ const UpdateJobPostScreen = ({ route, navigation }) => {
 
 const styles = StyleSheet.create({
   header: {
-    backgroundColor: '#007bff',
+    backgroundColor: '#fff',
     height: 80,
-    paddingTop: 20,
+    paddingTop: 25,
     alignItems: 'center',
     justifyContent: 'center',
     flexDirection: 'row',
   },
-  backButton: {
-    position: 'absolute',
-    left: 10,
-    top: 45,
-  },
   headerTitle: {
-    color: '#fff',
+    color: 'black',
     fontSize: 20,
     fontWeight: '600',
   },

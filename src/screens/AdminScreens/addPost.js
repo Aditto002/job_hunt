@@ -1,10 +1,9 @@
-import axios from 'axios';
-import React, { useState } from 'react';
-import { View, StyleSheet, ScrollView, Alert } from 'react-native';
-import { TextInput, Button, Card, Title, Paragraph, RadioButton, List, Appbar } from 'react-native-paper';
+import React, { useState, useRef } from 'react';
+import { View, StyleSheet, ScrollView, TouchableOpacity, KeyboardAvoidingView, Platform } from 'react-native';
+import { TextInput, Button, Card, Title, Paragraph, List, Appbar } from 'react-native-paper';
 import Toast from 'react-native-toast-message';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-// import { useNavigation } from '@react-navigation/native';
+import axios from 'axios';
 
 const PostJob = ({ navigation }) => {
   const [title, setTitle] = useState('');
@@ -15,46 +14,49 @@ const PostJob = ({ navigation }) => {
   const [experience, setExperience] = useState('');
   const [qualifications, setQualifications] = useState('');
   const [description, setDescription] = useState('');
-  // const navigation = useNavigation();
-  
 
-  const handlePostJob = async() => {
-
-
+  const handlePostJob = async () => {
     try {
+      const formData = {
+        jobTitle: title,
+        company: company,
+        location: location,
+        jobType: jobType,
+        salary: salary,
+        experience: experience,
+        qualifications: qualifications,
+        description: description,
+      };
 
-      const formData = { jobTitle:title, company:company,location:location , jobType:jobType, salary:salary,experience:experience,qualifications:qualifications,description:description};
+      const token = await AsyncStorage.getItem('token');
+      const response = await axios.post('http://192.168.1.228:3000/api/job/addjobs', formData, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
 
-      console.log("form data",formData)
-      const token =await AsyncStorage.getItem('token');
-      console.log("get token ",token)
-      const response = await axios.post(
-        'http://192.168.1.228:3000/api/job/addjobs',
-        formData,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`, 
-            // 'Content-Type': 'multipart/form-data', 
-          },
-        }
-      );
-      
-      console.log('Status:', response); 
-      if(response.data.status == 'success'){
+      if (response.data.status === 'success') {
         Toast.show({
-          type:'success',
-          text1:'Post add',
-          text2:"Post add",
-          visibilityTime:5000
-        })
+          type: 'success',
+          text1: 'Post added',
+          text2: 'Post added successfully',
+          visibilityTime: 5000,
+        });
       }
       navigation.navigate('AdminJoblist');
-
     } catch (error) {
-      console.error("Error fetching data: ", error);
+      console.error('Error posting job: ', error);
     }
-
   };
+
+  const CustomRadioButton = ({ value, selectedValue, onSelect, label }) => (
+    <TouchableOpacity style={styles.radioButtonContainer} onPress={() => onSelect(value)}>
+      <View style={[styles.radioCircle, selectedValue === value && styles.selectedRadioCircle]}>
+        {selectedValue === value && <View style={styles.selectedInnerCircle} />}
+      </View>
+      <Paragraph style={styles.radioLabel}>{label}</Paragraph>
+    </TouchableOpacity>
+  );
 
   return (
     <>
@@ -62,145 +64,100 @@ const PostJob = ({ navigation }) => {
         <Appbar.BackAction onPress={() => navigation.goBack()} />
         <Appbar.Content title="Post a Job" />
       </Appbar.Header>
-      <ScrollView contentContainerStyle={styles.container}>
-        <Card style={styles.card}>
-          <Card.Content>
-            <Title>Post a Job</Title>
-            <Paragraph>Fill in the details below to post a new job.</Paragraph>
-            <TextInput
-              label="Job Title"
-              value={title}
-              onChangeText={setTitle}
-              style={styles.input}
-              underlineColor="transparent"
-              mode="outlined" 
-              theme={{
-                colors: {
-                  primary: '#4d575b', 
-                  background: '#f0f0f0', 
-                  text: 'black' 
-                }
-              }}
-            />
-            <TextInput
-              label="Company"
-              value={company}
-              onChangeText={setCompany}
-              style={styles.input}
-              underlineColor="transparent"
-              mode="outlined" 
-              theme={{
-                colors: {
-                  primary: '#4d575b', 
-                  background: '#f0f0f0', 
-                  text: 'black' 
-                }
-              }}
-            />
-            <TextInput
-              label="Location"
-              value={location}
-              onChangeText={setLocation}
-              style={styles.input}
-              underlineColor="transparent"
-              mode="outlined" 
-              theme={{
-                colors: {
-                  primary: '#4d575b', 
-                  background: '#f0f0f0', 
-                  text: 'black' 
-                }
-              }}
-            />
-            <List.Section title="Job Type">
-              <View style={styles.radioButtonContainer}>
-                <View style={styles.radioButton}>
-                  <RadioButton
-                    value="full-time"
-                    status={jobType === 'full' ? 'checked' : 'unchecked'}
-                    onPress={() => setJobType('full')}
+
+      <KeyboardAvoidingView
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+        style={{ flex: 1 }}
+      >
+        <ScrollView contentContainerStyle={styles.container}>
+          <Card style={styles.card}>
+            <Card.Content>
+              <Title>Post a Job</Title>
+              <Paragraph>Fill in the details below to post a new job.</Paragraph>
+
+              <TextInput
+                label="Job Title"
+                value={title}
+                onChangeText={setTitle}
+                style={styles.input}
+                mode="outlined"
+              />
+
+              <TextInput
+                label="Company"
+                value={company}
+                onChangeText={setCompany}
+                style={styles.input}
+                mode="outlined"
+              />
+
+              <TextInput
+                label="Location"
+                value={location}
+                onChangeText={setLocation}
+                style={styles.input}
+                mode="outlined"
+              />
+
+              <List.Section title="Job Type">
+                <View>
+                  <CustomRadioButton
+                    value="full"
+                    selectedValue={jobType}
+                    onSelect={setJobType}
+                    label="Full-Time"
                   />
-                  <Paragraph>Full-Time</Paragraph>
-                </View>
-                <View style={styles.radioButton}>
-                  <RadioButton
-                    value="part-time"
-                    status={jobType === 'part' ? 'checked' : 'unchecked'}
-                    onPress={() => setJobType('part')}
+                  <CustomRadioButton
+                    value="part"
+                    selectedValue={jobType}
+                    onSelect={setJobType}
+                    label="Part-Time"
                   />
-                  <Paragraph>Part-Time</Paragraph>
                 </View>
-              </View>
-            </List.Section>
-            <TextInput
-              label="Salary"
-              value={salary}
-              onChangeText={setSalary}
-              style={styles.input}
-              keyboardType="numeric"
-              underlineColor="transparent"
-              mode="outlined" 
-              theme={{
-                colors: {
-                  primary: '#4d575b', 
-                  background: '#f0f0f0', 
-                  text: 'black' 
-                }
-              }}
-            />
-            <TextInput
-              label="Experience"
-              value={experience}
-              onChangeText={setExperience}
-              style={styles.input}
-              underlineColor="transparent"
-              mode="outlined" 
-              theme={{
-                colors: {
-                  primary: '#4d575b', 
-                  background: '#f0f0f0', 
-                  text: 'black' 
-                }
-              }}
-            />
-            <TextInput
-              label="Qualifications"
-              value={qualifications}
-              onChangeText={setQualifications}
-              style={styles.input}
-              underlineColor="transparent"
-              mode="outlined" 
-              theme={{
-                colors: {
-                  primary: '#4d575b', 
-                  background: '#f0f0f0', 
-                  text: 'black' 
-                }
-              }}
-            />
-            <TextInput
-              label="Job Description"
-              value={description}
-              onChangeText={setDescription}
-              multiline
-              numberOfLines={4}
-              style={styles.input}
-              underlineColor="transparent"
-              mode="outlined" 
-              theme={{
-                colors: {
-                  primary: '#4d575b', 
-                  background: '#f0f0f0', 
-                  text: 'black' 
-                }
-              }}
-            />
-            <Button mode="contained" onPress={handlePostJob} style={styles.button}>
-              Post Job
-            </Button>
-          </Card.Content>
-        </Card>
-      </ScrollView>
+              </List.Section>
+
+              <TextInput
+                label="Salary"
+                value={salary}
+                onChangeText={setSalary}
+                keyboardType="numeric"
+                style={styles.input}
+                mode="outlined"
+              />
+
+              <TextInput
+                label="Experience"
+                value={experience}
+                onChangeText={setExperience}
+                style={styles.input}
+                mode="outlined"
+              />
+
+              <TextInput
+                label="Qualifications"
+                value={qualifications}
+                onChangeText={setQualifications}
+                style={styles.input}
+                mode="outlined"
+              />
+
+              <TextInput
+                label="Job Description"
+                value={description}
+                onChangeText={setDescription}
+                multiline
+                numberOfLines={4}
+                style={styles.input}
+                mode="outlined"
+              />
+
+              <Button mode="contained" onPress={handlePostJob} style={styles.button}>
+                Post Job
+              </Button>
+            </Card.Content>
+          </Card>
+        </ScrollView>
+      </KeyboardAvoidingView>
     </>
   );
 };
@@ -217,23 +174,36 @@ const styles = StyleSheet.create({
     backgroundColor: '#ffffff',
   },
   input: {
-    paddingRight: 40,
     backgroundColor: '#f0f0f0',
     marginBottom: 16,
-    borderColor:'black',
-    borderRadius: 10
-
-
   },
   radioButtonContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-between',
     marginBottom: 16,
   },
-  radioButton: {
-    flexDirection: 'row',
+  radioCircle: {
+    height: 24,
+    width: 24,
+    borderRadius: 12,
+    borderWidth: 2,
+    borderColor: '#4d575b',
     alignItems: 'center',
+    justifyContent: 'center',
+    marginRight: 10,
+  },
+  selectedRadioCircle: {
+    borderColor: '#4d575b',
+  },
+  selectedInnerCircle: {
+    height: 12,
+    width: 12,
+    borderRadius: 6,
+    backgroundColor: '#4d575b',
+  },
+  radioLabel: {
+    fontSize: 16,
+    color: '#4d575b',
   },
   button: {
     marginTop: 16,

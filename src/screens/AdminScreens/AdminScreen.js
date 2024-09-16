@@ -5,7 +5,7 @@ import { useNavigation, useFocusEffect } from '@react-navigation/native';
 import Feather from '@expo/vector-icons/Feather';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
-import { RefreshControl } from 'react-native-gesture-handler';
+
 
 const AdminScreen = () => {
   const navigation = useNavigation();
@@ -67,11 +67,8 @@ const AdminScreen = () => {
     };
 
     fetchData();
-  }, []); // No need to update any value here
-  // const onRefresh = () => {
-  //   setRefreshing(true);
-  //   fetchData();
-  // };
+  }, []);
+
 
   useFocusEffect(
     React.useCallback(() => {
@@ -86,14 +83,12 @@ const AdminScreen = () => {
     <View style={styles.container}>
       <Appbar.Header>
         <Appbar.Action icon="menu" onPress={() => {}} />
-        <Appbar.Content title="Admin Dashboard" />
+        <Appbar.Content title="Dashboard" />
         <Feather name="user" style={styles.ficon} onPress={navigateProfile} />
       </Appbar.Header>
 
       <ScrollView contentContainerStyle={styles.content}
-      //  refreshControl={
-      //   <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-      // }
+     
       >
         <Card style={styles.card}>
           <Card.Content>
@@ -108,53 +103,12 @@ const AdminScreen = () => {
 
         <Card style={styles.card}>
           <Card.Content>
-            <Title>Approve Job Applications</Title>
+            <Title>View Job Post</Title>
             <Divider style={styles.divider} />
             <Button mode="contained" onPress={() => navigation.navigate('AdminJoblist')}>
               See post
             </Button>
-            {/* <DataTable>
-              <DataTable.Header>
-                <DataTable.Title>Applicant</DataTable.Title>
-                <DataTable.Title>Status</DataTable.Title>
-                <DataTable.Title>Action</DataTable.Title>
-              </DataTable.Header>
-              
-            </DataTable> */}
-          </Card.Content>
-        </Card>
 
-        <Card style={styles.card}>
-          <Card.Content>
-            <Title>Analytics Overview</Title>
-            <Paragraph>Monitor job posts and applications with detailed analytics.</Paragraph>
-            <Button mode="contained" onPress={() => navigation.navigate('AdminPostAnalyse')}>
-              View Analytics
-            </Button>
-          </Card.Content>
-        </Card>
-
-        <Card style={styles.card}>
-          <Card.Content>
-            <Title>Recent Activities</Title>
-            <Divider style={styles.divider} />
-            <List.Section>
-              <List.Item
-                title="Added new job post"
-                description="10 minutes ago"
-                left={props => <List.Icon {...props} icon="briefcase-plus" />}
-              />
-              <List.Item
-                title="Approved job application"
-                description="30 minutes ago"
-                left={props => <List.Icon {...props} icon="check" />}
-              />
-              <List.Item
-                title="Rejected job application"
-                description="1 hour ago"
-                left={props => <List.Icon {...props} icon="close" />}
-              />
-            </List.Section>
           </Card.Content>
         </Card>
       </ScrollView>

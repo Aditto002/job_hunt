@@ -7,6 +7,8 @@ import { useNavigation } from '@react-navigation/native';
 const JobDetails = ({ route }) => {
   const navigation = useNavigation();
   const { job } = route.params;
+  // const jobid = route.params._id
+   
   const currentUser = useSelector(state => state.user.currentUser);
 
   const handleApply = () => {
@@ -34,11 +36,12 @@ const JobDetails = ({ route }) => {
           <Text style={styles.detail}><Text style={styles.detailTitle}>Experience:</Text> {job.experience}</Text>
           <Text style={styles.detail}><Text style={styles.detailTitle}>Qualifications:</Text> {job.qualifications}</Text>
           <Text style={styles.detail}><Text style={styles.detailTitle}>Description:</Text> {job.description}</Text>
+          <Text style={styles.detail}><Text style={styles.detailTitle}>Description:</Text> {job._id}</Text>
         </View>
 
         <TouchableOpacity
           style={styles.applyButton}
-          onPress={handleApply}
+          onPress={()=> navigation.navigate('ApplyJob', { jobId: job._id })}
           activeOpacity={0.7}
         >
           <Text style={styles.applyButtonText}>Apply</Text>

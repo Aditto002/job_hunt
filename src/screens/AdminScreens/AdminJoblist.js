@@ -120,6 +120,13 @@ const AdminPosts = () => {
                 <FontAwesome name="trash" size={18} color="white" />
                 <Text style={styles.buttonText}> Delete</Text>
               </TouchableOpacity>
+              <TouchableOpacity
+                style={[styles.button, styles.applicantButton]}
+                onPress={() => navigation.navigate('ApplicantsList', { jobId: item._id })}
+              >
+                <FontAwesome name="file" size={18} color="white" />
+                <Text style={styles.buttonText}> Application</Text>
+              </TouchableOpacity>
             </View>
           </View>
         )}
@@ -135,6 +142,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#f3f4f6',
   },
   totalPosts: {
+    paddingTop: 25,
     fontSize: 22,
     fontWeight: 'bold',
     marginBottom: 20,
@@ -180,7 +188,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     paddingVertical: 10,
-    paddingHorizontal: 20,
+    paddingHorizontal: 2,
     borderRadius: 30,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
@@ -189,16 +197,20 @@ const styles = StyleSheet.create({
   },
   editButton: {
     backgroundColor: '#3498db',
-    width: '45%',
+    width: '30%',
   },
   deleteButton: {
     backgroundColor: '#e74c3c',
-    width: '45%',
+    width: '30%',
+  },
+  applicantButton:{
+    backgroundColor: '#008000',
+    width: '30%',
   },
   buttonText: {
     color: 'white',
-    marginLeft: 8,
-    fontSize: 16,
+    marginLeft: 2,
+    fontSize: 12,
     fontWeight: '600',
   },
   errorText: {

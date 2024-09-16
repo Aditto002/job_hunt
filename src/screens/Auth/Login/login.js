@@ -77,10 +77,10 @@ const Login = () => {
 
   return (
     <>
-    <Appbar.Header>
+    {/* <Appbar.Header>
         <Appbar.BackAction onPress={() => navigation.goBack()} />
         <Appbar.Content title="Login" />
-      </Appbar.Header>
+      </Appbar.Header> */}
     <View style={styles.container}>
       <Text style={styles.title}>Welcome Back!</Text>
       <View style={styles.form}>

@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
 import { View, StyleSheet, ScrollView, Alert } from 'react-native';
-import { TextInput, Button, Appbar } from 'react-native-paper';
+import { TextInput, Button, Appbar, Text } from 'react-native-paper';
 import { useNavigation } from '@react-navigation/native';
+import axios from 'axios';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const ApplyJob = ({ route }) => {
-  const { job } = route.params;
+const ApplyJob = ({route}) => {
+  const { jobId } = route.params;
   const navigation = useNavigation();
 
   const [fullName, setFullName] = useState('');
@@ -15,12 +17,37 @@ const ApplyJob = ({ route }) => {
   const [experience, setExperience] = useState('');
   const [skills, setSkills] = useState('');
 
-  const handleSubmit = () => {
+  const handleSubmit = async() => {
     if (!fullName || !email || !phone || !address || !education || !experience || !skills) {
       Alert.alert('Error', 'Please fill in all fields');
     } else {
-      Alert.alert('Success', 'Your application has been submitted');
-      navigation.goBack();
+      try {
+        const token = await AsyncStorage.getItem('token');
+        const response = await axios.post('http://192.168.1.228:3000/api/job/appliedjobs', {
+          name:fullName,
+            email: email,
+            phone_number:phone,
+            Address: address,
+            education: education,
+            experience: experience,
+            skills:skills,
+            jobId
+        }, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+  
+        if (response.status === 200) {
+          Alert.alert('Success', 'Your application has been submitted');
+          navigation.goBack();
+        } else {
+          console.log('Error:', response.data);
+        }
+      } catch (error) {
+        console.error('Error submitting application:', error);
+      }
+     
     }
   };
 
@@ -32,6 +59,7 @@ const ApplyJob = ({ route }) => {
       </Appbar.Header>
 
       <ScrollView contentContainerStyle={styles.container}>
+        {/* <Text>{jobId}</Text> */}
         <TextInput
           label="Full Name"
           value={fullName}

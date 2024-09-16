@@ -17,6 +17,8 @@ import ApplyJob from '../screens/JobPost/applyJob.js';
 import AdminPostAnalyse from '../screens/AdminScreens/adminPostanalyse.js';
 import AdminJoblist from '../screens/AdminScreens/AdminJoblist.js';
 import UpdateJobPostScreen from '../screens/AdminScreens/UpdatejobPost.js';
+import ApplicantsList from '../screens/AdminScreens/applicantsList.js';
+import AppliedJobsList from '../screens/userJobAppliedList/appliedJobsList.js';
 // import { createDrawerNavigator } from '@react-navigation/drawer';
 // import Toast from 'react-native-toast-message';
 
@@ -114,6 +116,16 @@ const StackNav = ()=>{
       <Stack.Screen
       name="UpdatJobPost"
       component={UpdateJobPostScreen}
+      options={{ headerBackVisible: false }}
+      />
+      <Stack.Screen
+      name="ApplicantsList"
+      component={ApplicantsList}
+      options={{ headerBackVisible: false }}
+      />
+      <Stack.Screen
+      name="AppliedJobsList"
+      component={AppliedJobsList}
       options={{ headerBackVisible: false }}
       />
     </Stack.Navigator>

@@ -66,9 +66,9 @@ const Home = () => {
 
   return (
     <SafeAreaView style={styles.mainContainer}>
-      <Appbar.Header style={styles.homeheader}>
-        <Appbar.Content style={{ paddingLeft: 10 }} title="Home" />
-        <Appbar.Content style={{ paddingLeft: 140 }} title="JobNest" onPress={() => navigation.navigate('Home')} />
+       <Appbar.Header style={styles.appbarHeader}>
+        <Appbar.Content title="JobNest" titleStyle={styles.appbarTitle} />
+        <Appbar.Action icon="account-circle" onPress={() => navigation.navigate('Profile')} />
       </Appbar.Header>
 
       <View style={styles.containers}>
@@ -117,13 +117,19 @@ const styles = StyleSheet.create({
   containers: {
     flexDirection: 'row',
     justifyContent: 'space-around',
-    marginVertical: 10,
+    // marginVertical: 10,
   },
-  homeheader: {
-    height: 60, 
-    backgroundColor: '#D6E3E8',
-    justifyContent: 'center',
-    alignItems: 'center',
+  appbarHeader: {
+    backgroundColor: '#f0f4f8', // Primary color
+    elevation: 0, // Remove Android shadow
+    shadowOpacity: 0, // Remove iOS shadow
+    marginTop: 'auto', // Ensure no extra margin at the top
+  },
+  appbarTitle: {
+    color: 'black',
+    fontSize: 20,
+    fontWeight: 'bold',
+    marginTop: 'auto',
   },
   subContainer: {
     backgroundColor: '#fff',

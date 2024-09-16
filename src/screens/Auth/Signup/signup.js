@@ -118,11 +118,12 @@ const Signup = () => {
     behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
     style={{ flex: 1 }}
   >
-    <><Appbar.Header>
+    {/* <>
+    <Appbar.Header>
         <Appbar.BackAction onPress={() => navigation.goBack()} />
         <Appbar.Content title="Register" />
       
-      </Appbar.Header></>
+      </Appbar.Header></> */}
 
 
       <ScrollView contentContainerStyle={{ flexGrow: 1 }} keyboardShouldPersistTaps="always">
@@ -138,13 +139,13 @@ const Signup = () => {
                 style={[styles.toggleButton, userType === 'User' && styles.selectedButton]}
                 onPress={() => setUserType('User')}
               >
-                <Text style={[styles.toggleButtonText, userType === 'User' && styles.selectedButtonText]}>User</Text>
+                <Text style={[styles.toggleButtonText, userType === 'User' && styles.selectedButtonText]}>Seeker</Text>
               </TouchableOpacity>
               <TouchableOpacity
                 style={[styles.toggleButton, userType === 'Admin' && styles.selectedButton]}
                 onPress={() => setUserType('Admin')}
               >
-                <Text style={[styles.toggleButtonText, userType === 'Admin' && styles.selectedButtonText]}>Admin</Text>
+                <Text style={[styles.toggleButtonText, userType === 'Admin' && styles.selectedButtonText]}>Advrtiser</Text>
               </TouchableOpacity>
             </View>
           </View>
@@ -173,7 +174,7 @@ const Signup = () => {
 
           <View style={styles.inputContainer}>
             <TextInput
-              label="User Name"
+              label="Username"
               name='username'
               style={styles.textInput}
               onChange={e => handleName(e)}
