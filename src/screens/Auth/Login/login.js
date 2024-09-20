@@ -1,4 +1,4 @@
-import { StyleSheet, View,TouchableOpacity } from 'react-native'
+import { StyleSheet, View,TouchableOpacity, Alert } from 'react-native'
 import { Button, TextInput, Text, Appbar } from 'react-native-paper';
 import React, { useEffect, useState } from 'react'
 import { NavigationContainer ,useNavigation} from '@react-navigation/native';
@@ -20,49 +20,47 @@ const Login = () => {
   const [showPassword,setShowPassword] = useState(false);
   const [passwords,setPasswords]=useState('');
   
-  // useEffect(()=>{
-  //   setTimeout(()=>{
-  //    Toast.show({
-  //      type:'success',
-  //      text1:'Wellcome',
-  //      text2:"hii",
-  //      visibilityTime:10000
-  //    })
-  //   },2000)
-  //  },[])
+
   const loginInfo = async () => {
     try {
       dispatch(signInStart());
       const formData = { email, password };
       const response = await axios.post("http://192.168.1.228:3000/api/auth/singin", formData);
+      console.log(" response ", response)
+      console.log(" response.data ", response.data)
+
       if (response.data.status !== 'success') {
         dispatch(signInFailure());
         return;
       }
-      dispatch(signInSuccess(response.data.data.user));
-      console.log('login token is ,,, ',response.data.token)
-      // console.log('login token is ,,, ',response)
-      AsyncStorage.setItem("token",response?.data?.token);
-      // AsyncStorage.setItem("isLoggedIn",JSON.stringify(true));
-      if(response.data.userType == "Admin"){
-
-        Toast.show({
-          type:'success',
-          text1:'Welcome To JobNest',
-          text2:"Signed in successfully",
-          visibilityTime:5000
-        })
-
-          navigation.navigate('AdminScreen');
+      if (response.data.data.user.isVerified === true){
+        dispatch(signInSuccess(response.data.data.user));
+        AsyncStorage.setItem("token",response?.data?.data?.token);
+        if(response.data.userType == "Admin"){
+  
+          Toast.show({
+            type:'success',
+            text1:'Welcome To JobNest',
+            text2:"Signed in successfully",
+            visibilityTime:5000
+          })
+  
+            navigation.navigate('AdminScreen');
+        }else{
+          Toast.show({
+            type:'success',
+            text1:'Wellcome JobNest',
+            text2:"Signed in successfully",
+            visibilityTime:5000
+          })
+          navigation.navigate('Home');
+        }  
       }else{
-        Toast.show({
-          type:'success',
-          text1:'Wellcome JobNest',
-          text2:"Signed in successfully",
-          visibilityTime:5000
-        })
-        navigation.navigate('Home');
+       Alert.alert('OTP Is Not verified!');
+       navigation.navigate('OtpVerification', { email: email });
       }
+
+      
     } catch (error) {
       Toast.show({
         type:'error',

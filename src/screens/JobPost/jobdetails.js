@@ -36,16 +36,23 @@ const JobDetails = ({ route }) => {
           <Text style={styles.detail}><Text style={styles.detailTitle}>Experience:</Text> {job.experience}</Text>
           <Text style={styles.detail}><Text style={styles.detailTitle}>Qualifications:</Text> {job.qualifications}</Text>
           <Text style={styles.detail}><Text style={styles.detailTitle}>Description:</Text> {job.description}</Text>
-          <Text style={styles.detail}><Text style={styles.detailTitle}>Description:</Text> {job._id}</Text>
+          {/* <Text style={styles.detail}><Text style={styles.detailTitle}>Description:</Text> {job._id}</Text> */}
         </View>
 
         <TouchableOpacity
-          style={styles.applyButton}
-          onPress={()=> navigation.navigate('ApplyJob', { jobId: job._id })}
-          activeOpacity={0.7}
-        >
-          <Text style={styles.applyButtonText}>Apply</Text>
-        </TouchableOpacity>
+  style={styles.applyButton}
+  onPress={() => {
+    if (currentUser) {
+      navigation.navigate('ApplyJob', { jobId: job._id });
+    } else {
+      navigation.navigate('Login');
+    }
+  }}
+    activeOpacity={0.7}
+  >
+   <Text style={styles.applyButtonText}>Apply</Text>
+   </TouchableOpacity>
+
       </View>
     </>
   );

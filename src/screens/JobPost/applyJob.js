@@ -4,13 +4,16 @@ import { TextInput, Button, Appbar, Text } from 'react-native-paper';
 import { useNavigation } from '@react-navigation/native';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useSelector } from 'react-redux';
+
 
 const ApplyJob = ({route}) => {
   const { jobId } = route.params;
   const navigation = useNavigation();
+  const { currentUser } = useSelector(state => state.user);
 
-  const [fullName, setFullName] = useState('');
-  const [email, setEmail] = useState('');
+  const [fullName, setFullName] = useState(currentUser?.username);
+  const [email, setEmail] = useState(currentUser?.email);
   const [phone, setPhone] = useState('');
   const [address, setAddress] = useState('');
   const [education, setEducation] = useState('');
@@ -62,7 +65,8 @@ const ApplyJob = ({route}) => {
         {/* <Text>{jobId}</Text> */}
         <TextInput
           label="Full Name"
-          value={fullName}
+          // value={fullName}
+          defaultValue={currentUser?.username?currentUser.username:""}
           onChangeText={setFullName}
           style={styles.input}
           underlineColor="transparent"
@@ -77,7 +81,8 @@ const ApplyJob = ({route}) => {
         />
         <TextInput
           label="Email Address"
-          value={email}
+          // value={email}
+          defaultValue={currentUser?.email?currentUser.email:""}
           onChangeText={setEmail}
           style={styles.input}
           underlineColor="transparent"
@@ -92,7 +97,8 @@ const ApplyJob = ({route}) => {
         />
         <TextInput
           label="Phone Number"
-          value={phone}
+          // value={phone}
+          defaultValue={currentUser?.phone?currentUser.phone:""}
           onChangeText={setPhone}
           style={styles.input}
           underlineColor="transparent"

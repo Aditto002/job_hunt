@@ -68,7 +68,7 @@ const Home = () => {
     <SafeAreaView style={styles.mainContainer}>
        <Appbar.Header style={styles.appbarHeader}>
         <Appbar.Content title="JobNest" titleStyle={styles.appbarTitle} />
-        <Appbar.Action icon="account-circle" onPress={() => navigation.navigate('Profile')} />
+        {/* <Appbar.Action icon="account-circle" onPress={() => navigation.navigate('Profile')} /> */}
       </Appbar.Header>
 
       <View style={styles.containers}>

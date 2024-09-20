@@ -74,23 +74,23 @@ const BottomBar = () => {
       onPress={handlePress}
     >
       {
-        !currentUser ? (
-          <>
-            <Feather name={'log-in'} style={styles.f_icons_G} />
-            <Text style={styles.profile_style}>Login</Text>
-          </>
-        ) : currentUser.userType === 'Admin' ? (
-          <>
-            <Feather name={'user'} style={styles.f_icons_G} />
-            <Text style={styles.profile_style}>Profile</Text>
-          </>
-        ) : (
-          <>
-            <Feather name={'user'} style={styles.f_icons_G} />
-            <Text style={styles.profile_style}>Profile</Text>
-          </>
-        )
-      }
+  !currentUser ? (
+    <>
+      <Feather name={'log-in'} style={styles.f_icons_G} />
+      <Text style={styles.profile_style}>Login</Text>
+    </>
+  ) : currentUser.userType === 'Admin' ? (
+    <>
+      <Feather name={'user-plus'} style={styles.d_icons_G} />
+      <Text style={styles.profile_style}>DashB..</Text>
+    </>
+  ) : (
+    <>
+      <Feather name={'user'} style={styles.f_icons_G} />
+      <Text style={styles.profile_style}>Profile</Text>
+    </>
+  )
+}
     </TouchableOpacity>
     </View>
   );
@@ -122,8 +122,23 @@ const styles = StyleSheet.create({
     color: 'black',
     fontSize: 25, 
   },
+  d_icons_G:{
+    position: 'absolute',
+    right: 0,
+    top: '50%',
+    transform: [{ translateY: -25 }],
+    color: 'black',
+    fontSize: 28,
+    // marginLeft:20
+
+  },
   profile_style:{
     marginTop:28,
     marginRight:-10
+  },
+  profile_styles:{
+    marginTop:26,
+    marginRight:-20,
+    marginLeft:-20
   }
 });

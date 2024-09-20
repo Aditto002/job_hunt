@@ -1,6 +1,6 @@
 import React, { useState, useRef } from 'react';
 import { Avatar, Text, TextInput, Button } from 'react-native-paper';
-import { Alert, StyleSheet, View, TouchableOpacity, BackHandler } from 'react-native';
+import { Alert, StyleSheet, View, TouchableOpacity, BackHandler,Linking } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
 import * as ImagePicker from 'expo-image-picker';
 import * as FileSystem from 'expo-file-system';
@@ -20,10 +20,11 @@ const Profile = () => {
   const [image, setImage] = useState(null);
   const [imageLoading, setImageLoading] = useState(false);
   const [isUploaded, setIsUploaded] = useState(false);
-  const [name, setName] = useState(currentUser.username);
-  const [emails, setEmailes] = useState(currentUser.email);
-  const [passwords, setPasswords] = useState(currentUser.password);
-  const [profilePicture, setProfilePicture] = useState(currentUser.profilePicture);
+  const [name, setName] = useState(currentUser?.username);
+  const [emails, setEmailes] = useState(currentUser?.email);
+  const [passwords, setPasswords] = useState(currentUser?.password);
+  // const [phone, setPhone] = useState();
+  const [profilePicture, setProfilePicture] = useState(currentUser?.profilePicture);
   const navigation = useNavigation();
 //////////////////////////////////////////////////////////////////////////////
   const handelBackpress =()=>{
@@ -66,6 +67,10 @@ const Profile = () => {
   const handelPassword = (e) => {
     const passvar = e.nativeEvent.text;
     setPasswords(passvar);
+  };
+  const handelphone = (e) => {
+    const phonevar = e.nativeEvent.text;
+    setPhone(phonevar);
   };
 
   const pickImage = async () => {
@@ -121,6 +126,35 @@ const Profile = () => {
     }
   };
 
+  const payment = async () => {
+    try {
+      console.log("object id ",currentUser._id);
+      const token = await AsyncStorage.getItem('token');
+  
+      const res = await axios.get(`http://192.168.1.228:3000/api/auth/paymentApply/${currentUser._id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+  
+      const paymentUrl = res.data.url; 
+      console.log("Redirecting to payment gateway:", paymentUrl);
+  
+      
+      if (paymentUrl) {
+        Linking.openURL(paymentUrl); 
+      }
+      console.log(" hello aditto ", res.status)
+      if(res.status===200){
+        Alert.alert('Success', 'Your message has been sent');
+
+      }
+    } catch (error) {
+      console.error("Payment error:", error);
+    }
+  };
+  /////////////////////////////////
+
   const Sendtobackend = async () => {
     try {
       dispatch(updateUserStart());
@@ -139,6 +173,9 @@ const Profile = () => {
       if (profilePicture !== currentUser.profilePicture) {
         formData.profilePicture = profilePicture;
       }
+      // if (phone) {
+      //   formData.phone = phone;
+      // }
 
       if (Object.keys(formData).length === 0) {
         Toast.show({
@@ -149,24 +186,9 @@ const Profile = () => {
         })
         return;
       }
-      // token
-      // const accessToken = await AsyncStorage.getItem("token");
-      // console.log(accessToken);
-      // if (!accessToken) {
-      //   Toast.show({
-      //     type: 'error',
-      //     text1: 'No Token',
-      //     text2: "No token found, please log in again",
-      //     visibilityTime: 5000
-      //   });
-      //   return;
-      // }
+
       const response = await axios.post(`http://192.168.1.228:3000/api/user/update/${currentUser._id}`, formData);
-      // {
-      //   headers: {
-      //     'Content-Type': 'application/json',
-      //     'Authorization': `Bearer ${accessToken}` // Ensure proper formatting
-      //   }}
+   
       
       console.log(response.data.data);
       if(response.status == 200){
@@ -219,16 +241,16 @@ const Profile = () => {
           )}
         </View>
         <TextInput
-          mode="outlined"
-          label="Name"
-          defaultValue={currentUser.username ?currentUser.username:""}
-          style={styles.input_margin}
-          onChange={handleName}
-        />
+  mode="outlined"
+  label="Name"
+  value={currentUser?.username ? currentUser.username : ""}
+  style={styles.input_margin}
+  onChangeText={handleName}
+/>
         <TextInput
           mode="outlined"
           label="Email"
-          defaultValue={currentUser.email?currentUser.email:""}
+          defaultValue={currentUser?.email?currentUser.email:""}
           style={styles.input_margin}
           onChange={handelEmail}
         />
@@ -238,15 +260,38 @@ const Profile = () => {
           // defaultValue={currentUser.password}
           onChange={handelPassword}
         />
+        {/* <TextInput
+          mode="outlined"
+          label="Phone_Number"
+          defaultValue={currentUser.phone?currentUser.phone:""}
+          onChange={handelphone}
+        /> */}
         <Button mode="contained" style={styles.button} onPress={Sendtobackend}>
           Update
         </Button>
         <Button mode="contained" style={styles.button} onPress={SingOutfn}>
           Sing Out
         </Button>
-        <Button mode="contained" style={styles.button} onPress={()=>navigation.navigate('AppliedJobsList')}>
-          Applied Job List
+        {
+  currentUser?.userType === 'User' && (
+    <Button 
+      mode="contained" 
+      style={styles.button} 
+      onPress={() => navigation.navigate('AppliedJobsList')}
+    >
+      Applied Job List
+    </Button>
+  )
+}
+        {
+           currentUser?.userType === 'User'? (
+            <Button mode="contained" style={styles.button} onPress={payment}>
+          Become a Advertiser
         </Button>
+          ):('')
+
+        }
+        
       </View>
     </>
   );

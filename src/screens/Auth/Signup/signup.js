@@ -30,7 +30,8 @@ const Signup = () => {
   const [passwords,setPasswords]=useState('');
   const[passwordsverify,setPasswordsverify]=useState(false);
   const [showPassword,setShowPassword] = useState(false);
-  const [userType , setUserType] = useState('');
+  const [loading,setLoading] = useState(false);
+  const [userType , setUserType] = useState('User');
   const [secretText , setSecretText] = useState('');
   
 
@@ -68,36 +69,43 @@ const Signup = () => {
   const Sendtobackend = async () => {
     console.log(secretText);
     try {
-      dispatch(signInStart());
-
+      // dispatch(signInStart());
+      setLoading(true)
       const formData = { username:name, email:emails,password:passwords , userType};
-      if(userType=='Admin' && secretText != "ak"){
-        return Alert.alert("invalid Admin");
-      }
+      // if(userType=='Admin' && secretText != "ak"){
+      //   return Alert.alert("invalid Admin");
+      // }
 
       const response = await axios.post("http://192.168.1.228:3000/api/auth/singup", formData);
-      // console.log(response.data.data);
-      dispatch(signInSuccess(response.data.data))
-      // console.log("token response",response?.data?.token)
-      await AsyncStorage.setItem('token', response?.data?.token);
-      if(response.data.data.userType == "Admin"){
-        Toast.show({
-          type:'success',
-          text1:'Welcome To JobNest',
-          text2:"Signed Up successfully",
-          visibilityTime:5000
-        })
-        navigation.navigate('AdminScreen')
-    }else{
-      Toast.show({
-        type:'success',
-        text1:'Welcome To JobNest',
-        text2:"Signed Up successfully",
-        visibilityTime:5000
-      })
+      console.log("OtP data ",response.data.data.isVerified);
+       if(response.data.data.isVerified === false){
+        console.log("email ", emails)
+        navigation.navigate('OtpVerification', { email: emails });
+       }
+       setLoading(false)
+        
+      // dispatch(signInSuccess(response.data.data))
 
-      navigation.navigate('Profile');
-    };
+ 
+      // await AsyncStorage.setItem('token', response?.data?.token);
+      // if(response.data.data.userType == "Admin"){
+      //   Toast.show({
+      //     type:'success',
+      //     text1:'Welcome To JobNest',
+      //     text2:"Signed Up successfully",
+      //     visibilityTime:5000
+      //   })
+        // navigation.navigate('AdminScreen')
+    // }else{
+    //   Toast.show({
+    //     type:'success',
+    //     text1:'Welcome To JobNest',
+    //     text2:"Signed Up successfully",
+    //     visibilityTime:5000
+    //   })
+
+    //   // navigation.navigate('Profile');
+    // };
     } catch (error) {
       Toast.show({
         type:'error',
@@ -106,7 +114,7 @@ const Signup = () => {
         visibilityTime:5000
       })
       
-      dispatch(signInFailure(error));
+      // dispatch(signInFailure(error));
       console.error("Error fetching data: ", error);
     }
   };
@@ -132,7 +140,7 @@ const Signup = () => {
           <Text style={styles.text_space} variant="labelLarge">Find your best job in Jobnest</Text>
           {errormsg && <Text style={styles.errorText}>{errormsg}</Text>}
 
-          <View style={styles.toggleButtonContainer}>
+          {/* <View style={styles.toggleButtonContainer}>
             <Text style={styles.radioButton_title}>SignUp As</Text>
             <View style={styles.toggleButtons}>
               <TouchableOpacity
@@ -148,7 +156,7 @@ const Signup = () => {
                 <Text style={[styles.toggleButtonText, userType === 'Admin' && styles.selectedButtonText]}>Advrtiser</Text>
               </TouchableOpacity>
             </View>
-          </View>
+          </View> */}
 
        
 
@@ -157,7 +165,7 @@ const Signup = () => {
 
         <View style={styles.subcontainer}>
 
-{
+{/* {
                     userType == 'Admin' ? 
                     <View style={styles.inputContainer}>
                     <TextInput
@@ -169,7 +177,7 @@ const Signup = () => {
                  </View>
         
                     :""
-}
+} */}
 
 
           <View style={styles.inputContainer}>
@@ -228,10 +236,20 @@ const Signup = () => {
               Password must contain uppercase, lowercase, number, and be at least 6 characters long
             </Text>)
           }
+          {
+  loading === false ? (
+    <Button style={{ marginTop: 5 }} icon="login" mode="contained" onPress={Sendtobackend}>
+      SignUp
+    </Button>
+  ) : (
+    <Button style={{ marginTop: 5 }}  mode="contained">
+      Loading.....
+    </Button>
+    
+  )
+}
 
-          <Button style={{ marginTop: 5 }} icon="login" mode="contained" onPress={Sendtobackend}>
-            SignUp
-          </Button>
+          
 
           <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "center", marginTop: 5 }}>
             <Text style={{ marginRight: 0 }}>Already have an account? </Text>

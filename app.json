@@ -2,6 +2,34 @@
   "expo": {
     "name": "Job_hunt",
     "slug": "Job_hunt",
+    "scheme": "jobhunt",
+    "platforms": ["ios", "android"],
+    "ios": {
+      "bundleIdentifier": "com.example.jobhunt",
+      "supportsTablet": true
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#ffffff"
+      },
+      "package": "com.example.jobhunt",
+      "intentFilters": [
+        {
+          "action": "VIEW",
+          "data": {
+            "scheme": "https",
+            "host": "www.jobhunt.com",  
+            "pathPrefix": "/success-payment"
+          },
+          "category": [
+            "BROWSABLE",
+            "DEFAULT"
+          ]
+        }
+      ] 
+
+    },
     "plugins": [
       [
         "expo-image-picker",
@@ -22,15 +50,7 @@
     "assetBundlePatterns": [
       "**/*"
     ],
-    "ios": {
-      "supportsTablet": true
-    },
-    "android": {
-      "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#ffffff"
-      }
-    },
+   
     "web": {
       "favicon": "./assets/favicon.png"
     }

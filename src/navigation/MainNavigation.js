@@ -19,12 +19,27 @@ import AdminJoblist from '../screens/AdminScreens/AdminJoblist.js';
 import UpdateJobPostScreen from '../screens/AdminScreens/UpdatejobPost.js';
 import ApplicantsList from '../screens/AdminScreens/applicantsList.js';
 import AppliedJobsList from '../screens/userJobAppliedList/appliedJobsList.js';
+import OtpVerification from '../screens/Auth/OTPVerification/otpVeriification.js';
+// import PaymentStatusScreen from '../screens/PaymentStatusScreen/paymentStatusScreen.js';
+import SuccessPaymentScreen from '../screens/PaymentStatusScreen/paymentStatusScreen.js';
+// import SuccessPayment from '../screens/PaymentStatusScreen/paymentStatusScreen.js';
 // import { createDrawerNavigator } from '@react-navigation/drawer';
 // import Toast from 'react-native-toast-message';
+// import * as Linking from 'expo-linking';
 
 
+const Stack = createNativeStackNavigator();
+const linking = {
+  prefixes: ['jobhunt://'],
+  config: {
+    screens: {
+      SuccessPayment: 'success-payment',
+      FailPayment: 'fail-payment',
+      CancelPayment: 'cancel-payment',
+    },
+  },
+};
 const StackNav = ()=>{
-  const Stack = createNativeStackNavigator();
   const [routeName, setRouteName] = React.useState('');
 
   return(
@@ -128,6 +143,20 @@ const StackNav = ()=>{
       component={AppliedJobsList}
       options={{ headerBackVisible: false }}
       />
+      <Stack.Screen
+      name="OtpVerification"
+      component={OtpVerification}
+      options={{ headerBackVisible: false }}
+      />
+      {/* <Stack.Screen
+      name="PaymentStatusScreen"
+      component={PaymentStatusScreen}
+      options={{ headerBackVisible: false }}
+      /> */}
+      {/* //////////////////////////////////////// */}
+      <Stack.Screen name="SuccessPayment" component={SuccessPaymentScreen} />
+        {/* <Stack.Screen name="FailPayment" component={FailPaymentScreen} />
+        <Stack.Screen name="CancelPayment" component={CancelPaymentScreen} /> */}
     </Stack.Navigator>
     {routeName !== 'Homebg'  && <BottomBar />}
     {/* {routeName !== 'Homebg' && routeName !== 'Login' && routeName !== 'Signup' && <BottomBar />} */}
@@ -140,7 +169,7 @@ const StackNav = ()=>{
 const MainNavigation = () => {
   
   return (
-    <NavigationContainer>
+    <NavigationContainer linking={linking}>
       <StackNav/>
 
     </NavigationContainer>

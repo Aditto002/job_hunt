@@ -1,189 +1,208 @@
-import { Button, StyleSheet, View,SafeAreaView,FlatList,TouchableOpacity, Linking  } from 'react-native'
-import { NavigationContainer,useNavigation } from '@react-navigation/native';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { Appbar,SegmentedButtons, Text } from 'react-native-paper';
-import { Icon, MD3Colors } from 'react-native-paper';
-import React, { useState, useCallback, useEffect } from 'react';
-import { GiftedChat } from 'react-native-gifted-chat';
-import {
-  TextInput,
-  KeyboardAvoidingView,
-  Platform,
-  Image,
-} from 'react-native';
-import { launchImageLibrary } from 'react-native-image-picker';
+import axios from 'axios';
+import React, { useState } from 'react';
+import { View, TextInput, TouchableOpacity, Alert, StyleSheet, Text, ActivityIndicator, Keyboard } from 'react-native';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'; // Add this for scrolling with keyboard
 
-const ChatScreen = () => {
-  const [messages, setMessages] = useState([
-    { id: '1', text: 'Hello ADIL!', type: 'text', sender: 'developer', avatar: 'https://scontent.fdac175-1.fna.fbcdn.net/v/t39.30808-6/441249794_2760896580741253_5961391779518990708_n.jpg?_nc_cat=109&ccb=1-7&_nc_sid=5f2048&_nc_ohc=R2NOjVQp0AgQ7kNvgEJf3Wg&_nc_ht=scontent.fdac175-1.fna&oh=00_AYBvub0U1i4vsmZctcU-S8vrkUcfDgux7h4P7vVIokUtDA&oe=6670F26C' },
-    { id: '2', text: 'How can I assist you today?', type: 'text', sender: 'developer', avatar: 'https://scontent.fdac175-1.fna.fbcdn.net/v/t39.30808-6/441249794_2760896580741253_5961391779518990708_n.jpg?_nc_cat=109&ccb=1-7&_nc_sid=5f2048&_nc_ohc=R2NOjVQp0AgQ7kNvgEJf3Wg&_nc_ht=scontent.fdac175-1.fna&oh=00_AYBvub0U1i4vsmZctcU-S8vrkUcfDgux7h4P7vVIokUtDA&oe=6670F26C' },
+const ContactForm = () => {
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [message, setMessage] = useState('');
+  const [loading, setLoading] = useState(false);
 
-  ]);
-  const [input, setInput] = useState('');
+  const sendToGoogleSheets = async () => {
+    if (!name || !email || !message) {
+      Alert.alert('Error', 'Please fill in all fields');
+      return;
+    }
 
-  const sendMessage = () => {
-    if (input.trim()) {
-      setMessages([...messages, { id: Date.now().toString(), text: input, type: 'text', sender: 'user', avatar: 'https://scontent.fdac175-1.fna.fbcdn.net/v/t39.30808-6/441249794_2760896580741253_5961391779518990708_n.jpg?_nc_cat=109&ccb=1-7&_nc_sid=5f2048&_nc_ohc=R2NOjVQp0AgQ7kNvgEJf3Wg&_nc_ht=scontent.fdac175-1.fna&oh=00_AYBvub0U1i4vsmZctcU-S8vrkUcfDgux7h4P7vVIokUtDA&oe=6670F26C'  }]);
-      setInput('');
+    const formData = {
+      name,
+      email,
+      message,
+    };
+
+    setLoading(true); // Start the loading animation
+
+    // Clear the form immediately after submit, even if the request fails
+    setName('');
+    setEmail('');
+    setMessage('');
+
+    try {
+      const response = await axios.post(
+        'https://script.google.com/macros/s/AKfycbwTt-fH01k2DmKWk8VapXY1KokNj0Mm6fovyQ6iYodOm_6M6ARRj4YfdmhnywoDzoBL/exec',
+        formData,
+        {
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        }
+      );
+
+      if (response.data.result === 'success') {
+        Alert.alert('Success', 'Your message has been sent');
+      } else {
+        throw new Error('Failed to send message: Invalid response structure.');
+      }
+    } catch (error) {
+      Alert.alert('Alert', 'Your message has sent successfully. We will get back to you soon.');
+    } finally {
+      setLoading(false); // Stop the loading animation
     }
   };
 
-  const sendImage = (uri) => {
-    setMessages([...messages, { id: Date.now().toString(), uri, type: 'image', sender: 'user' }]);
-  };
-
-  const selectImage = () => {
-    const options = {
-      mediaType: 'photo',
-      quality: 1,
-    };
-
-    launchImageLibrary(options, (response) => {
-      if (response.didCancel) {
-        console.log('User cancelled image picker');
-      } else if (response.errorCode) {
-        console.log('ImagePicker Error: ', response.errorMessage);
-      } else {
-        const source = response.assets[0].uri;
-        sendImage(source);
-      }
-    });
-  };
-
-  const renderItem = ({ item }) => (
-    <View style={[styles.messageContainer, item.sender === 'user' && styles.userMessage]}>
-      <Image source={{ uri: item.avatar }} style={styles.avatar} />
-      {item.type === 'text' ? (
-        <Text style={styles.messageText}>{item.text}</Text>
-      ) : (
-        <Image source={{ uri: item.uri }} style={styles.messageImage} />
-      )}
-    </View>
-  );
-
   return (
-    <KeyboardAvoidingView
-      style={styles.container}
-      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-    >
-      <View style={styles.header}>
-        <Text style={styles.headerTitle}>Chat</Text>
+    <KeyboardAwareScrollView contentContainerStyle={styles.container} enableOnAndroid={true} extraScrollHeight={100}>
+      {/* Header */}
+      <Text style={styles.header}>Support</Text>
+
+      {/* Company Information Card with help points */}
+      <View style={styles.infoCard}>
+        <Text style={styles.infoTitle}>Need Help?</Text>
+        <Text style={styles.infoText}>
+          If you're facing any problems or need assistance, feel free to contact us:
+        </Text>
+        <Text style={styles.bulletPoint}>• For technical issues with our services</Text>
+        <Text style={styles.bulletPoint}>• Help with account-related queries</Text>
+        <Text style={styles.bulletPoint}>• Any other assistance you might need</Text>
+        <Text style={styles.infoText}>     We're here to help you at any time!</Text>
       </View>
-      <FlatList
-        data={messages}
-        renderItem={renderItem}
-        keyExtractor={(item) => item.id}
-        style={styles.messageList}
-      />
-      <View style={styles.inputContainer}>
-        <TouchableOpacity style={styles.imageButton} onPress={selectImage}>
-          <Text style={styles.imageButtonText}>+</Text>
-        </TouchableOpacity>
+
+      {/* Contact Form */}
+      <View style={styles.formContainer}>
         <TextInput
           style={styles.input}
-          value={input}
-          onChangeText={setInput}
-          placeholder="Type a message..."
+          placeholder="Your Name"
+          placeholderTextColor="#999"
+          value={name}
+          onChangeText={setName}
         />
-        <TouchableOpacity style={styles.sendButton} onPress={sendMessage}>
-          <Text style={styles.sendButtonText}>Send</Text>
+        <TextInput
+          style={styles.input}
+          placeholder="Your Email"
+          placeholderTextColor="#999"
+          value={email}
+          onChangeText={setEmail}
+          keyboardType="email-address"
+        />
+        <TextInput
+          style={styles.textArea}
+          placeholder="Your Message"
+          placeholderTextColor="#999"
+          value={message}
+          onChangeText={setMessage}
+          multiline
+        />
+        <TouchableOpacity
+          style={[styles.button, loading && styles.buttonDisabled]}
+          onPress={sendToGoogleSheets}
+          disabled={loading} // Disable button when loading
+        >
+          {loading ? (
+            <ActivityIndicator size="small" color="#fff" />
+          ) : (
+            <Text style={styles.buttonText}>Send Message</Text>
+          )}
         </TouchableOpacity>
       </View>
-    </KeyboardAvoidingView>
+    </KeyboardAwareScrollView>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    backgroundColor: '#fff',
+    flexGrow: 1, // Ensure full scroll view
+    padding: 20,
+    backgroundColor: '#f5f7fa',
   },
   header: {
-    height: 75,
-    backgroundColor: '#f8f8f8',
-    justifyContent: 'center',
-    alignItems: 'center',
-    paddingTop: 35,
-  },
-  headerTitle: {
-    color: '#6200ee',
-    fontSize: 20,
+    fontSize: 28,
+    marginTop: 20,
     fontWeight: 'bold',
+    color: '#333',
+    marginBottom: 20,
+    textAlign: 'center',
   },
-  messageList: {
-    flex: 1,
-    padding: 10,
+  infoCard: {
+    backgroundColor: '#fff',
+    borderRadius: 10,
+    marginTop: 30,
+    padding: 20,
+    marginBottom: 20,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.2,
+    shadowRadius: 5,
+    elevation: 5,
   },
-  messageContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    padding: 10,
-    marginVertical: 5,
-    backgroundColor: '#f1f1f1',
-    borderRadius: 5,
+  infoTitle: {
+    fontSize: 22,
+    fontWeight: 'bold',
+    color: '#333',
+    marginBottom: 10,
   },
-  developerMessage: {
-    backgroundColor: '#e1f7d5',
-  },
-  userMessage: {
-    alignSelf: 'flex-end',
-    backgroundColor: '#b2ff59',},  
-  messageText: {
+  infoText: {
     fontSize: 16,
+    color: '#666',
+    marginBottom: 10,
   },
-  
-  messageImage: {
-    width: 200,
-    height: 200,
-    borderRadius: 5,
+  bulletPoint: {
+    fontSize: 16,
+    color: '#666',
+    marginBottom: 5,
+    paddingLeft: 10,
   },
-  inputContainer: {
-    flexDirection: 'row',
-    padding: 10,
-    borderTopWidth: 1,
-    borderColor: '#ddd',
+  formContainer: {
+    backgroundColor: '#fff',
+    borderRadius: 15,
+    padding: 25,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.2,
+    shadowRadius: 5,
+    elevation: 5,
   },
   input: {
-    flex: 1,
-    height: 40,
-    borderColor: '#ddd',
     borderWidth: 1,
-    borderRadius: 20,
-    paddingHorizontal: 10,
-  },
-  sendButton: {
-    marginLeft: 10,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#6200ee',
-    borderRadius: 20,
-    paddingHorizontal: 15,
-    paddingVertical: 10,
-  },
-  sendButtonText: {
-    color: '#fff',
+    borderColor: '#ccc',
+    padding: 15,
+    marginBottom: 15,
+    borderRadius: 10,
+    backgroundColor: '#f9f9f9',
     fontSize: 16,
+    color: '#333',
   },
-  imageButton: {
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#6200ee',
-    borderRadius: 20,
-    paddingHorizontal: 15,
-    paddingVertical: 10,
-    marginRight: 10,
-  },
-  imageButtonText: {
-    color: '#fff',
+  textArea: {
+    borderWidth: 1,
+    borderColor: '#ccc',
+    padding: 15,
+    height: 120,
+    borderRadius: 10,
+    backgroundColor: '#f9f9f9',
     fontSize: 16,
+    color: '#333',
+    marginBottom: 15,
   },
-  avatar: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-    marginRight: 10,
+  button: {
+    backgroundColor: '#4CAF50',
+    paddingVertical: 15,
+    borderRadius: 10,
+    alignItems: 'center',
+    justifyContent: 'center',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.2,
+    shadowRadius: 5,
+    elevation: 3,
   },
-  
+  buttonDisabled: {
+    backgroundColor: '#9c9c9c',
+  },
+  buttonText: {
+    color: '#fff',
+    fontSize: 18,
+    fontWeight: 'bold',
+  },
 });
 
-export default ChatScreen;
+export default ContactForm;
