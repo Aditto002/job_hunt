@@ -51,27 +51,37 @@ const Profile = () => {
       }
     })
   )
-
-
-
-  const handleName = (e) => {
-    const namevar = e.nativeEvent.text;
-    setName(namevar);
+  const handleName = (text) => {
+    setName(text);
   };
   
-  const handelEmail = (e) => {
-    const emailvar = e.nativeEvent.text;
-    setEmailes(emailvar);
+  const handelEmail = (text) => {
+    setEmailes(text);
+  };
+  
+  const handelPassword = (text) => {
+    setPasswords(text);
   };
 
-  const handelPassword = (e) => {
-    const passvar = e.nativeEvent.text;
-    setPasswords(passvar);
-  };
-  const handelphone = (e) => {
-    const phonevar = e.nativeEvent.text;
-    setPhone(phonevar);
-  };
+
+  // const handleName = (e) => {
+  //   const namevar = e.nativeEvent.text;
+  //   setName(namevar);
+  // };
+  
+  // const handelEmail = (e) => {
+  //   const emailvar = e.nativeEvent.text;
+  //   setEmailes(emailvar);
+  // };
+
+  // const handelPassword = (e) => {
+  //   const passvar = e.nativeEvent.text;
+  //   setPasswords(passvar);
+  // };
+  // const handelphone = (e) => {
+  //   const phonevar = e.nativeEvent.text;
+  //   setPhone(phonevar);
+  // };
 
   const pickImage = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
@@ -243,29 +253,26 @@ const Profile = () => {
         <TextInput
   mode="outlined"
   label="Name"
-  value={currentUser?.username ? currentUser.username : ""}
+  value={name}
   style={styles.input_margin}
   onChangeText={handleName}
 />
-        <TextInput
-          mode="outlined"
-          label="Email"
-          defaultValue={currentUser?.email?currentUser.email:""}
-          style={styles.input_margin}
-          onChange={handelEmail}
-        />
-        <TextInput
-          mode="outlined"
-          label="Password"
-          // defaultValue={currentUser.password}
-          onChange={handelPassword}
-        />
-        {/* <TextInput
-          mode="outlined"
-          label="Phone_Number"
-          defaultValue={currentUser.phone?currentUser.phone:""}
-          onChange={handelphone}
-        /> */}
+<TextInput
+  mode="outlined"
+  label="Email"
+  value={emails}
+  style={styles.input_margin}
+  onChangeText={handelEmail}
+/>
+<TextInput
+  mode="outlined"
+  label="Password"
+  // value={passwords}
+  style={styles.input_margin}
+  onChangeText={handelPassword}
+/>
+
+
         <Button mode="contained" style={styles.button} onPress={Sendtobackend}>
           Update
         </Button>
