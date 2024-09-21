@@ -3,7 +3,7 @@ import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, View } from 'react-native';
 import { PaperProvider, Text } from 'react-native-paper';
 import MainNavigation from './src/navigation/MainNavigation.js';
-import { Provider } from 'react-redux';
+import { Provider, useDispatch } from 'react-redux';
 import store, { persistor } from './src/redux/store.js';
 import { PersistGate } from 'redux-persist/integration/react';
 import Toast, { BaseToast, ErrorToast } from 'react-native-toast-message';
@@ -59,28 +59,28 @@ const toastConfig = {
 };
 
 export default function App() {
-  // const [isLoggedIn,setIsLoggedIn] = useState(false);
-  // const getData =async()=>{
-  //   const data = AsyncStorage.getItem('isLoggedIn');
-  //   console.log(data, 'at app.jsx');
-  //   setIsLoggedIn(data);
-  // }
-   
-  // useEffect(()=>{
-  //   getData();
-  // })
+  // const dispatch = useDispatch();
 
-  // const navigation = useNavigation();
+  // const loadToken = async () => {
+  //   try {
+  //     const token = await AsyncStorage.getItem('token');
+  //     if (token) {
+  //       dispatch(signInWithToken(token));
+  //     }
+  //   } catch (error) {
+  //     console.error('Error loading token:', error);
+  //   }
+  // };
+
+  // useEffect(() => {
+  //   loadToken();
+  // }, []);
+
 
   return (
     <Provider store={store}>
       <PersistGate loading={null} persistor={persistor}>
         <PaperProvider>
-          {/* {
-            isLoggedIn?(<MainNavigation >
-          
-              </MainNavigation>):( navigation.navigate('Login'))
-          } */}
           <MainNavigation/>
           <Toast config={toastConfig}/>
         </PaperProvider>

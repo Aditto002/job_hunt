@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, View, SafeAreaView, FlatList, TouchableOpacity, Text } from 'react-native';
+import { Platform, StyleSheet, View, SafeAreaView, FlatList, TouchableOpacity, Text } from 'react-native';
 import { Appbar, Searchbar } from 'react-native-paper';
 import axios from 'axios';
 import { useNavigation } from '@react-navigation/native';
@@ -117,13 +117,15 @@ const styles = StyleSheet.create({
   containers: {
     flexDirection: 'row',
     justifyContent: 'space-around',
-    // marginVertical: 10,
   },
   appbarHeader: {
-    backgroundColor: '#f0f4f8', // Primary color
-    elevation: 0, // Remove Android shadow
-    shadowOpacity: 0, // Remove iOS shadow
-    marginTop: 'auto', // Ensure no extra margin at the top
+    backgroundColor: '#f0f4f8', 
+    elevation: 0, 
+    marginTop: 20,
+    marginTop: Platform.OS === 'ios' ? -70 : 0, 
+    marginLeft: Platform.OS === 'android' ? 140 : 0, 
+    shadowOpacity: 0, 
+     
   },
   appbarTitle: {
     color: 'black',
@@ -142,7 +144,9 @@ const styles = StyleSheet.create({
     shadowRadius: 10,
     shadowOffset: { width: 0, height: 5 },
     elevation: 5,
+    fontSize:20,
   },
+
   searchbar: {
     marginHorizontal: 20,
     marginVertical: 10,

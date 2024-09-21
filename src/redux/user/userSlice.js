@@ -17,6 +17,11 @@ const userSlice = createSlice({
       state.currentUser = action.payload;
       state.loading = false;
       state.error = false;
+      // const token = action.payload.token;
+      // if (token) {
+      //   AsyncStorage.setItem('token', token);
+      // }
+      
     },
     signInFailure: (state, action) => {
       state.loading = false;

@@ -27,6 +27,11 @@ const Profile = () => {
   const [profilePicture, setProfilePicture] = useState(currentUser?.profilePicture);
   const navigation = useNavigation();
 //////////////////////////////////////////////////////////////////////////////
+
+
+
+
+////////////////////////////////////////////////////////////////////////////
   const handelBackpress =()=>{
     Alert.alert(
       'Exit App',
@@ -64,24 +69,7 @@ const Profile = () => {
   };
 
 
-  // const handleName = (e) => {
-  //   const namevar = e.nativeEvent.text;
-  //   setName(namevar);
-  // };
-  
-  // const handelEmail = (e) => {
-  //   const emailvar = e.nativeEvent.text;
-  //   setEmailes(emailvar);
-  // };
 
-  // const handelPassword = (e) => {
-  //   const passvar = e.nativeEvent.text;
-  //   setPasswords(passvar);
-  // };
-  // const handelphone = (e) => {
-  //   const phonevar = e.nativeEvent.text;
-  //   setPhone(phonevar);
-  // };
 
   const pickImage = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
@@ -154,11 +142,10 @@ const Profile = () => {
       if (paymentUrl) {
         Linking.openURL(paymentUrl); 
       }
-      console.log(" hello aditto ", res.status)
-      if(res.status===200){
-        Alert.alert('Success', 'Your message has been sent');
+      // if(res.status===200){
+      //   Alert.alert('Success', 'Your message has been sent');
 
-      }
+      // }
     } catch (error) {
       console.error("Payment error:", error);
     }

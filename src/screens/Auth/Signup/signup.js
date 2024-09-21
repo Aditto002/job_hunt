@@ -67,55 +67,72 @@ const Signup = () => {
   }
 
   const Sendtobackend = async () => {
-    console.log(secretText);
-    try {
-      // dispatch(signInStart());
-      setLoading(true)
-      const formData = { username:name, email:emails,password:passwords , userType};
-      // if(userType=='Admin' && secretText != "ak"){
-      //   return Alert.alert("invalid Admin");
-      // }
+    if(!name || !emails || !passwords){
+      Toast.show({
+        type:'error',
+        text1:'!!',
+        text2:"All filed required",
+        visibilityTime:5000
+      })
+      setLoading(false)
+    }else{
+      try {
 
-      const response = await axios.post("http://192.168.1.228:3000/api/auth/singup", formData);
-      console.log("OtP data ",response.data.data.isVerified);
-       if(response.data.data.isVerified === false){
-        console.log("email ", emails)
-        navigation.navigate('OtpVerification', { email: emails });
-       }
-       setLoading(false)
-        
-      // dispatch(signInSuccess(response.data.data))
+        setLoading(true)
+        const formData = { username:name, email:emails,password:passwords , userType};
+      
+        const response = await axios.post("http://192.168.1.228:3000/api/auth/singup", formData);
+        setLoading(false)
+        console.log("OtP data ",response);
+        console.log("object data ", response.data.success)
+        if(response.data.success === 'false' ){
+          Toast.show({
+            type:'error',
+            text1:'!!',
+            text2:"User already exist",
+            visibilityTime:5000
+          })
+        }
+        if(response?.data?.data?.isVerified === false){
+          console.log("email ", emails)
+          navigation.navigate('OtpVerification', { email: emails });
+         }
 
- 
-      // await AsyncStorage.setItem('token', response?.data?.token);
-      // if(response.data.data.userType == "Admin"){
+         setLoading(false)
+          
+     
+  
+   
+        // await AsyncStorage.setItem('token', response?.data?.token);
+        // if(response.data.data.userType == "Admin"){
+        //   Toast.show({
+        //     type:'success',
+        //     text1:'Welcome To JobNest',
+        //     text2:"Signed Up successfully",
+        //     visibilityTime:5000
+        //   })
+          // navigation.navigate('AdminScreen')
+      // }else{
       //   Toast.show({
       //     type:'success',
       //     text1:'Welcome To JobNest',
       //     text2:"Signed Up successfully",
       //     visibilityTime:5000
       //   })
-        // navigation.navigate('AdminScreen')
-    // }else{
-    //   Toast.show({
-    //     type:'success',
-    //     text1:'Welcome To JobNest',
-    //     text2:"Signed Up successfully",
-    //     visibilityTime:5000
-    //   })
-
-    //   // navigation.navigate('Profile');
-    // };
-    } catch (error) {
-      Toast.show({
-        type:'error',
-        text1:'!!',
-        text2:"something is wrong",
-        visibilityTime:5000
-      })
-      
-      // dispatch(signInFailure(error));
-      console.error("Error fetching data: ", error);
+  
+      //   // navigation.navigate('Profile');
+      // };
+      } catch (error) {
+        Toast.show({
+          type:'error',
+          text1:'!!',
+          text2:"please check your credentil",
+          visibilityTime:5000
+        })
+        
+        
+        console.error("Error fetching data: ", error);
+      }
     }
   };
 
@@ -140,44 +157,15 @@ const Signup = () => {
           <Text style={styles.text_space} variant="labelLarge">Find your best job in Jobnest</Text>
           {errormsg && <Text style={styles.errorText}>{errormsg}</Text>}
 
-          {/* <View style={styles.toggleButtonContainer}>
-            <Text style={styles.radioButton_title}>SignUp As</Text>
-            <View style={styles.toggleButtons}>
-              <TouchableOpacity
-                style={[styles.toggleButton, userType === 'User' && styles.selectedButton]}
-                onPress={() => setUserType('User')}
-              >
-                <Text style={[styles.toggleButtonText, userType === 'User' && styles.selectedButtonText]}>Seeker</Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={[styles.toggleButton, userType === 'Admin' && styles.selectedButton]}
-                onPress={() => setUserType('Admin')}
-              >
-                <Text style={[styles.toggleButtonText, userType === 'Admin' && styles.selectedButtonText]}>Advrtiser</Text>
-              </TouchableOpacity>
-            </View>
-          </View> */}
+  
 
        
 
 
- {/* for admin */}
+
 
         <View style={styles.subcontainer}>
 
-{/* {
-                    userType == 'Admin' ? 
-                    <View style={styles.inputContainer}>
-                    <TextInput
-                      label="Secret Text"
-                      name='secret_text'
-                      style={styles.textInput}
-                      onChange={(e)=>setSecretText(e.nativeEvent.text)}          
-                    />
-                 </View>
-        
-                    :""
-} */}
 
 
           <View style={styles.inputContainer}>
@@ -208,7 +196,7 @@ const Signup = () => {
           </View>
           {
             emails.length < 1 ? null : emailsverify ? null : (<Text style={{ marginLeft: 10, color: 'red' }}>
-              Enter a proper email address
+              Enter a valid email address
             </Text>)
           }
 
@@ -273,7 +261,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     backgroundColor: '#f5f5f5',
     padding: 20,
-    marginTop: -70
+    marginTop: 10
   },
   subcontainer: {
     width: "100%",

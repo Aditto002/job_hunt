@@ -47,28 +47,8 @@ const BottomBar = () => {
         onPress={() => navigation.navigate('ChatScreen')}
       >
         <Icon source="chat" color={MD3Colors.black} size={28} />
-        <Text>Chat</Text>
+        <Text>Support</Text>
       </TouchableOpacity>
-      {/* <TouchableOpacity
-        style={[styles.bottom_bar, activeItem === 'login' && styles.active]}
-        onPress={() => navigation.navigate('Profile')}
-      >
-          {
-            currentUser ?(
-              < >
-            <Feather name={'user'} style={styles.f_icons_G}/>
-            <Text style={styles.profile_style}>Profile</Text>
-            </>
-          ): 
-            (
-              <TouchableOpacity style={[styles.bottom_bar, activeItem === 'login' && styles.active]}
-              onPress={() => navigation.navigate('Login')}>
-              <Icon source="login" color={MD3Colors.black} size={28} />
-              <Text>Login</Text>
-              </TouchableOpacity>
-            )
-          } 
-      </TouchableOpacity> */}
          <TouchableOpacity
       style={[styles.bottom_bar, activeItem === 'profile' && styles.active]}
       onPress={handlePress}

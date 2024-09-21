@@ -20,12 +20,8 @@ import UpdateJobPostScreen from '../screens/AdminScreens/UpdatejobPost.js';
 import ApplicantsList from '../screens/AdminScreens/applicantsList.js';
 import AppliedJobsList from '../screens/userJobAppliedList/appliedJobsList.js';
 import OtpVerification from '../screens/Auth/OTPVerification/otpVeriification.js';
-// import PaymentStatusScreen from '../screens/PaymentStatusScreen/paymentStatusScreen.js';
 import SuccessPaymentScreen from '../screens/PaymentStatusScreen/paymentStatusScreen.js';
-// import SuccessPayment from '../screens/PaymentStatusScreen/paymentStatusScreen.js';
-// import { createDrawerNavigator } from '@react-navigation/drawer';
-// import Toast from 'react-native-toast-message';
-// import * as Linking from 'expo-linking';
+import { useSelector } from 'react-redux';
 
 
 const Stack = createNativeStackNavigator();
@@ -34,20 +30,33 @@ const linking = {
   config: {
     screens: {
       SuccessPayment: 'success-payment',
-      FailPayment: 'fail-payment',
-      CancelPayment: 'cancel-payment',
+      // FailPayment: 'fail-payment',
+      // CancelPayment: 'cancel-payment',
     },
   },
 };
 const StackNav = ()=>{
   const [routeName, setRouteName] = React.useState('');
+  const { currentUser } = useSelector(state => state.user);
+  const [initialRoute, setInitialRoute] = React.useState('Homebg');
+  
+
+
+  React.useEffect(() => {
+  
+    if (currentUser) {
+      setInitialRoute('Profile'); 
+    } else {
+      setInitialRoute('Homebg'); 
+    }
+  }, [currentUser]);
 
   return(
     <>
     
     <Stack.Navigator
       
-      initialRouteName="Homebg"
+      // initialRouteName={initialRoute}
       screenListeners={({ route }) => {
         setRouteName(route.name);
       }}
@@ -61,7 +70,21 @@ const StackNav = ()=>{
         headerTitleAlign: '#8BB2C5'
 
       }}
-    >
+    >{
+      currentUser?(
+        <Stack.Screen
+        name="Profile"
+        component={Profile}
+        options={{ headerBackVisible: false }} 
+      />
+      ):(
+        <Stack.Screen
+        name='Homebg'
+        component={Homebg}
+        options={{ headerShown: false }}
+        />
+      )
+    }
       <Stack.Screen
         name="PostJob"
         component={PostJob}
@@ -72,13 +95,7 @@ const StackNav = ()=>{
         component={Jobdetails}
         options={{ headerShown: false }}
       />
-      <Stack.Screen
-      name='Homebg'
-      component={Homebg}
-      options={{ headerShown: false }}
-      
-      
-      />
+     
       <Stack.Screen
         name="Home"
         component={Home}
@@ -103,11 +120,7 @@ const StackNav = ()=>{
       name="ApplyJob" 
       component={ApplyJob}
        />
-      <Stack.Screen
-        name="Profile"
-        component={Profile}
-        options={{ headerBackVisible: false }} 
-      />
+
       <Stack.Screen
         name="ChatScreen"
         component={ChatScreen}
@@ -148,15 +161,8 @@ const StackNav = ()=>{
       component={OtpVerification}
       options={{ headerBackVisible: false }}
       />
-      {/* <Stack.Screen
-      name="PaymentStatusScreen"
-      component={PaymentStatusScreen}
-      options={{ headerBackVisible: false }}
-      /> */}
       {/* //////////////////////////////////////// */}
       <Stack.Screen name="SuccessPayment" component={SuccessPaymentScreen} />
-        {/* <Stack.Screen name="FailPayment" component={FailPaymentScreen} />
-        <Stack.Screen name="CancelPayment" component={CancelPaymentScreen} /> */}
     </Stack.Navigator>
     {routeName !== 'Homebg'  && <BottomBar />}
     {/* {routeName !== 'Homebg' && routeName !== 'Login' && routeName !== 'Signup' && <BottomBar />} */}

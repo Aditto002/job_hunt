@@ -36,7 +36,7 @@ const JobDetails = ({ route }) => {
           <Text style={styles.detail}><Text style={styles.detailTitle}>Experience:</Text> {job.experience}</Text>
           <Text style={styles.detail}><Text style={styles.detailTitle}>Qualifications:</Text> {job.qualifications}</Text>
           <Text style={styles.detail}><Text style={styles.detailTitle}>Description:</Text> {job.description}</Text>
-          {/* <Text style={styles.detail}><Text style={styles.detailTitle}>Description:</Text> {job._id}</Text> */}
+
         </View>
 
         <TouchableOpacity

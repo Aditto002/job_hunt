@@ -22,54 +22,64 @@ const Login = () => {
   
 
   const loginInfo = async () => {
-    try {
-      dispatch(signInStart());
-      const formData = { email, password };
-      const response = await axios.post("http://192.168.1.228:3000/api/auth/singin", formData);
-      console.log(" response ", response)
-      console.log(" response.data ", response.data)
-
-      if (response.data.status !== 'success') {
-        dispatch(signInFailure());
-        return;
-      }
-      if (response.data.data.user.isVerified === true){
-        dispatch(signInSuccess(response.data.data.user));
-        AsyncStorage.setItem("token",response?.data?.data?.token);
-        if(response.data.userType == "Admin"){
-  
-          Toast.show({
-            type:'success',
-            text1:'Welcome To JobNest',
-            text2:"Signed in successfully",
-            visibilityTime:5000
-          })
-  
-            navigation.navigate('AdminScreen');
-        }else{
-          Toast.show({
-            type:'success',
-            text1:'Wellcome JobNest',
-            text2:"Signed in successfully",
-            visibilityTime:5000
-          })
-          navigation.navigate('Home');
-        }  
-      }else{
-       Alert.alert('OTP Is Not verified!');
-       navigation.navigate('OtpVerification', { email: email });
-      }
-
-      
-    } catch (error) {
+    if(!email || !password){
       Toast.show({
         type:'error',
         text1:'!!',
-        text2:"something is wrong",
+        text2:"All fileds are requried",
         visibilityTime:5000
       })
-      dispatch(signInFailure(error));
-      console.error("Error fetching data: ", error);
+    }else{
+
+      try {
+        dispatch(signInStart());
+        const formData = { email, password };
+        const response = await axios.post("http://192.168.1.228:3000/api/auth/singin", formData);
+        console.log(" response ", response)
+        console.log(" response.data ", response.data)
+  
+        if (response.data.status !== 'success') {
+          dispatch(signInFailure());
+          return;
+        }
+        if (response.data.data.user.isVerified === true){
+          dispatch(signInSuccess(response.data.data.user));
+          AsyncStorage.setItem("token",response?.data?.data?.token);
+          if(response.data.userType == "Admin"){
+    
+            Toast.show({
+              type:'success',
+              text1:'Welcome To JobNest',
+              text2:"Signed in successfully",
+              visibilityTime:5000
+            })
+    
+              navigation.navigate('AdminScreen');
+          }else{
+            Toast.show({
+              type:'success',
+              text1:'Wellcome JobNest',
+              text2:"Signed in successfully",
+              visibilityTime:5000
+            })
+            navigation.navigate('Home');
+          }  
+        }else{
+         Alert.alert('OTP Is Not verified!');
+         navigation.navigate('OtpVerification', { email: email });
+        }
+  
+        
+      } catch (error) {
+        Toast.show({
+          type:'error',
+          text1:'!!',
+          text2:"wrong email or password",
+          visibilityTime:5000
+        })
+        dispatch(signInFailure(error));
+        console.error("Error fetching data: ", error);
+      }
     }
   };
 
